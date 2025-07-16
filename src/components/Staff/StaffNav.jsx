@@ -17,14 +17,14 @@ function StaffNav() {
       </div>
 
       {/* Sidebar */}
-      <div className={`fixed top-0 left-0 h-full w-64 bg-sky-800 text-white shadow-lg transform transition-transform duration-300 ease-in-out ${toggle ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed z-99 top-0 left-0 h-full w-64 bg-sky-800 text-white shadow-lg transform transition-transform duration-300 ease-in-out ${toggle ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col p-6 space-y-4 text-lg font-medium">
           <button onClick={() => setToggle(false)}><X className="text-white cursor-pointer" /></button>
 
           <Link to={"/dashboard"}>
           <button className="hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">Home</button> </Link>
-          <button className="hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">Reports</button>
-          <button className="hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">Visitors List</button>
+          <Link to={"/report"}>
+          <button className="hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">Reports</button> </Link>
 
           <button className="mt-auto flex items-center justify-center gap-2 bg-gray-900 hover:bg-white px-4 py-2 rounded-full transition cursor-pointer  hover:text-black"
             onClick={() => {handlelogout()}}
