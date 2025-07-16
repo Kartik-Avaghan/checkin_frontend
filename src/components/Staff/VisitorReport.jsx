@@ -1,36 +1,36 @@
 import { useState } from "react";
-import { CalendarDays, Download, Filter , File , Clock4 , Phone } from "lucide-react";
+import { CalendarDays, Download, Filter , File , Clock4 , Phone , CircleAlert } from "lucide-react";
 
 import jsPDF from "jspdf";
 import { autoTable } from "jspdf-autotable";
 
-const data = [
-  {
-    id: 1,
-    name: "John Doe",
-    mobile: "+1234567890",
-    visiting: "Sarah Johnson - HR Director",
-    purpose: "Job interview for Senior Developer position",
-    checkIn: "09:34",
-    checkOut: null,
-    duration: null,
-    status: "in-office",
-  },
-  {
-    id: 2,
-    name: "Alice Smith",
-    mobile: "+1987654321",
-    visiting: "Mike Brown - IT Manager",
-    purpose: "Technical consultation meeting",
-    checkIn: "07:34",
-    checkOut: "10:34",
-    duration: "180 mins",
-    status: "checked-out",
-  },
-];
 
 function VisitorReport() {
   const [staffFilter, setStaffFilter] = useState("all");
+  const [data , setdata] = useState([
+    {
+      id: 1,
+      name: "John Doe",
+      mobile: "+1234567890",
+      visiting: "Sarah Johnson - HR Director",
+      purpose: "Job interview for Senior Developer position",
+      checkIn: "09:34",
+      checkOut: null,
+      duration: null,
+      status: "in-office",
+    },
+    {
+      id: 2,
+      name: "Alice Smith",
+      mobile: "+1987654321",
+      visiting: "Mike Brown - IT Manager",
+      purpose: "Technical consultation meeting",
+      checkIn: "07:34",
+      checkOut: "10:34",
+      duration: "180 mins",
+      status: "checked-out",
+    },
+  ])
 
   const CSVgenerator = (data) => {
     const array = Array.isArray(data) ? data : [data];
@@ -140,6 +140,7 @@ function VisitorReport() {
 
 
       {/* Mobile View: Cards */}
+      { data.length > 0 ? 
       <div className="lg:hidden space-y-4">
         {data.map((v) => (
           <div
@@ -190,9 +191,13 @@ function VisitorReport() {
             </div>
           </div>
         ))}
-      </div>
+      </div> : <div className=" lg:hidden flex items-center justify-center gap-2 mt-40 text-xl text-gray-800 font-medium">
+        <CircleAlert /> No Data found 
+      </div>}
+      
 
       {/* Desktop View: Table */}
+      {data.length > 0 ? 
       <div className="hidden lg:block">
         <div className="overflow-x-auto border border-gray-300 rounded-xl">
           <table className="min-w-full text-sm">
@@ -234,7 +239,9 @@ function VisitorReport() {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> : <div className="hidden lg:flex items-center justify-center gap-3 mt-50 text-3xl text-gray-800 font-medium"> 
+        <CircleAlert size={30}/> <span> No Data found </span> 
+      </div> }
     </div>
   );
 }

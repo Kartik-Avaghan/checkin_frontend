@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import StaffNav from '../components/Staff/StaffNav'
-import { UserPlus, Calendar, Clock } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 function CheckinForm() {
@@ -12,9 +12,21 @@ function CheckinForm() {
 
     let navigate = useNavigate();
 
-    function handleCheckin(){
+    function handleCheckin(e){
+        e.preventDefault()
+
+        let data = {
+            'name':name,
+            'mobile': mobile,
+            'visiting':visitng,
+            'purpose':purpose,
+        }
+
+
+
         navigate('/dashboard')
     }
+    
   return (
     <div>
         <StaffNav/>

@@ -5,6 +5,7 @@ import StaffLogin from '../pages/StaffLogin'
 import StaffDashboard from '../pages/StaffDashboard'
 import CheckinForm from '../pages/CheckinForm'
 import Report from '../pages/Report'
+import Auth from './Auth'
 
 function CustomRouter() {
   return (
@@ -13,7 +14,9 @@ function CustomRouter() {
       <Route path='/dashboard' element={<StaffDashboard/>} />
       <Route path='/checkin' element={<CheckinForm/>}/>
       <Route path='/report' element={<Report/>}/>
-
+      <Route path='/staff' element={<Auth/>}>
+        
+      </Route>
     </Routes>
   )
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserRoundSearch, LogOut, ChevronDown, ChevronUp } from 'lucide-react';
+import { UserRoundSearch, LogOut, ChevronDown, ChevronUp , UserRoundX } from 'lucide-react';
 
 const initialVisitors = [
   {
@@ -19,12 +19,22 @@ const initialVisitors = [
     visiting: 'Mike Brown - IT Manager',
     purpose: 'Technical consultation meeting',
     checkInTime: '2025-07-15T13:25',
-    status: 'checked-out',
-    checkOutTime: '2025-07-15T16:25',
+    status: 'checked-in',
+    checkOutTime: null,
   },
   {
     id: 3,
     name: 'Robert Wilson',
+    mobile: '+1122334455',
+    visiting: 'Lisa Davis - Marketing Head',
+    purpose: 'Vendor presentation and product demo',
+    checkInTime: '2025-07-15T16:55',
+    status: 'checked-in',
+    checkOutTime: null,
+  },
+  {
+    id: 4,
+    name: 'Wilson',
     mobile: '+1122334455',
     visiting: 'Lisa Davis - Marketing Head',
     purpose: 'Vendor presentation and product demo',
@@ -48,6 +58,7 @@ function formatDateTime(dateStr) {
 }
 
 const CheckedinVisitors = () => {
+
   const [visitors, setVisitors] = useState(initialVisitors);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -84,7 +95,7 @@ const CheckedinVisitors = () => {
 
 
   return (
-    <div className="max-w-6xl mx-auto p-4 bg-white mt-6 rounded-xl">
+    <div className="max-w-6xl mx-auto p-4 bg-white mt-6 rounded-xl mb-16">
       <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
         <UserRoundSearch className="text-blue-600" />
         Visitor List
@@ -123,7 +134,7 @@ const CheckedinVisitors = () => {
             <div className="flex justify-between items-center">
               <div>
                 <div className="text-lg font-bold p-2">{v.name}</div>
-                <div className="text-sm text-gray-600">{v.mobile}</div>
+                <div className="text-sm text-gray-600 pl-2">{v.mobile}</div>
               </div>
               <div className="flex gap-2 items-center">
                 {/* Check Out Button */}
@@ -153,7 +164,7 @@ const CheckedinVisitors = () => {
               Check-in: <strong>{formatDateTime(v.checkInTime)}</strong>
             </div>
 
-            <div className='mt-2'>
+            <div className='my-2'>
               {v.status === 'checked-in' ? (
                 <span className="bg-green-600 text-white px-3 py-2 text-sm rounded-full">Checked In</span>
               ) : (
@@ -164,15 +175,16 @@ const CheckedinVisitors = () => {
 
             {/* Expanded details */}
             {expandedCard === v.id && (
-              <div className="mt-4 text-sm text-gray-600 space-y-1">
+              <div className="mt-4 text-sm text-gray-600 space-y-1 ">
                 <div className='text-lg'><span className="font-medium text-gray-800 ">Visiting:</span> {v.visiting}</div>
                 <div className='text-lg'><span className="font-medium text-gray-800 mt-2">Purpose:</span> {v.purpose}</div>
               </div>
             )}
           </div>
         ))}
-      </div> : <div className='flex w-full justify-center text-red-500 text-xl'>
-        No Result Found
+      </div> : <div className='flex w-full justify-center text-gray-600 font-semibold text-xl gap-3 mt-20'>
+        <UserRoundX/>
+        No Visitor Found
       </div>}
     </div>
   );

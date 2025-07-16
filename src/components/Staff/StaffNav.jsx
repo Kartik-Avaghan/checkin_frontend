@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Menu, LogOut, X } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link , useNavigate } from 'react-router';
 
 function StaffNav() {
   const [toggle, setToggle] = useState(false);
+  const navigate = useNavigate()
 
   function handlelogout(){
-
+    navigate('/')
   }
 
   return (
