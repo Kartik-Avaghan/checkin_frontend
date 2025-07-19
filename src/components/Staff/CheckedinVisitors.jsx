@@ -1,82 +1,88 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { UserRoundSearch, LogOut, ChevronDown, ChevronUp , UserRoundX } from 'lucide-react';
 
-const initialVisitors = [
-  {
-    id: 1,
-    name: 'John Doe',
-    mobile: '+1234567890',
-    visiting: 'Sarah Johnson - HR Director',
-    purpose: 'Job interview for Senior Developer position',
-    checkInTime: '2025-07-15T15:25',
-    status: 'checked-in',
-    checkOutTime: null,
-  },
-  {
-    id: 2,
-    name: 'Alice Smith',
-    mobile: '+1987654321',
-    visiting: 'Mike Brown - IT Manager',
-    purpose: 'Technical consultation meeting',
-    checkInTime: '2025-07-15T13:25',
-    status: 'checked-in',
-    checkOutTime: null,
-  },
-  {
-    id: 3,
-    name: 'Robert Wilson',
-    mobile: '+1122334455',
-    visiting: 'Lisa Davis - Marketing Head',
-    purpose: 'Vendor presentation and product demo',
-    checkInTime: '2025-07-15T16:55',
-    status: 'checked-in',
-    checkOutTime: null,
-  },
-  {
-    id: 4,
-    name: 'Wilson',
-    mobile: '+1122334455',
-    visiting: 'Lisa Davis - Marketing Head',
-    purpose: 'Vendor presentation and product demo',
-    checkInTime: '2025-07-15T16:55',
-    status: 'checked-in',
-    checkOutTime: null,
-  },
-];
+
 
 function formatTime(timeStr) {
   const date = new Date(timeStr);
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
+// function formatDateTime(dateStr) {
+//   const date = new Date(dateStr);
+//   return `${date.toLocaleDateString('en-US', {
+//     month: 'short',
+//     day: 'numeric',
+//   })}, ${formatTime(dateStr)}`;
+// }
+
+
 function formatDateTime(dateStr) {
   const date = new Date(dateStr);
   return `${date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
-  })}, ${formatTime(dateStr)}`;
+  })}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 }
+
 
 const CheckedinVisitors = () => {
 
-  const [visitors, setVisitors] = useState(initialVisitors);
+  const [visitors, setVisitors] = useState([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [expandedCard, setExpandedCard] = useState(null);
 
-  const handleCheckout = (id) => {
-    setVisitors((prev) =>
-      prev.map((v) =>
-        v.id === id
-          ? {
-              ...v,
-              status: 'checked-out',
-              checkOutTime: new Date().toISOString(),
-            }
-          : v
+
+  useEffect(()=>{
+    fetch(`http://localhost:8080/visitors/checkedin`)
+    .then((response)=>{
+      if(!response.ok){
+        throw new Error("Failed to fetch visitors");
+        
+      }
+      return response.json();
+    })
+    .then((data)=> setVisitors(data))
+    .catch((error)=>console.log("Error fetching visitors:", error));
+  },[]);
+
+  
+
+  
+
+const handleCheckout = (id) => {
+  fetch(`http://localhost:8080/visitors/checkout/${id}`, {
+    method: 'POST'
+  })
+    .then((response) => {
+      if (!response.ok){   
+        throw new Error("Failed to checkout")
+      }
+      return response.json();
+    })
+    .then((updatedVisitor) => {
+      setVisitors((preData) =>
+        preData.map((v) => v.id === updatedVisitor.id ?  updatedVisitor : v)
       )
-    );
-  };
+    })
+    .catch((error) => console.log("Error during checkout:", error));
+}
+
+
+
+    // setVisitors((prev) =>
+    //   prev.map((v) =>
+    //     v.id === id
+    //       ? {
+    //           ...v,
+    //           status: 'checked-out',
+    //           checkOutTime: new Date().toISOString(),
+    //         }
+    //       : v
+    //   )
+    // );
+  // };
 
   const toggleExpand = (id) => {
     setExpandedCard(expandedCard === id ? null : id);
@@ -88,10 +94,20 @@ const CheckedinVisitors = () => {
     const matchesSearch =
       v.name.toLowerCase().includes(search.toLowerCase()) ||
       v.mobile.includes(search);
+    // const matchesStatus =
+    //   statusFilter === 'all' || v.status === statusFilter;
+    // return matchesSearch && matchesStatus;
+
     const matchesStatus =
-      statusFilter === 'all' || v.status === statusFilter;
-    return matchesSearch && matchesStatus;
+  statusFilter === 'all' ||
+  (statusFilter === 'checked-in' && v.status === true) ||
+  (statusFilter === 'checked-out' && v.status === false);
+
+
+  return matchesSearch && matchesStatus;
+
   });
+
 
 
   return (
@@ -138,7 +154,7 @@ const CheckedinVisitors = () => {
               </div>
               <div className="flex gap-2 items-center">
                 {/* Check Out Button */}
-                {v.status === 'checked-in' ? (
+                {v.status === true ? (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -161,11 +177,13 @@ const CheckedinVisitors = () => {
             </div>
 
             <div className="text-sm md:text-lg text-gray-700 p-2">
-              Check-in: <strong>{formatDateTime(v.checkInTime)}</strong>
+              {/* Check-in: <strong>{formatDateTime(v.checkInTime)}</strong> */}
+              Check-in: <strong>{v.checkinDate && v.checkinTime ? formatDateTime(`${v.checkinDate}T${v.checkinTime}`) : 'N/A'}</strong>
+
             </div>
 
             <div className='my-2'>
-              {v.status === 'checked-in' ? (
+              {v.status === true ? (
                 <span className="bg-green-600 text-white px-3 py-2 text-sm rounded-full">Checked In</span>
               ) : (
                 <span className="bg-gray-200 text-gray-800 px-3 py-2 text-sm rounded-full">Checked Out</span>

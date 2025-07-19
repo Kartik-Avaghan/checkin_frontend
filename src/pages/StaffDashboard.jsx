@@ -2,6 +2,7 @@ import { Link } from 'react-router'
 
 import StaffNav from '../components/Staff/StaffNav'
 import CheckedinVisitors from '../components/Staff/CheckedinVisitors'
+import CheckinForm from './CheckinForm'
 
 
 
@@ -11,6 +12,7 @@ function StaffDashboard() {
         <StaffNav/>
 
         <CheckedinVisitors/>
+        
         
         <Link to={'/checkin'}>    
             <div className='w-full flex items-center justify-center p-4 fixed bottom-0 z-50'>
