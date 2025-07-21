@@ -8,9 +8,16 @@ import { autoTable } from "jspdf-autotable";
 function VisitorReport() {
   const [staffFilter, setStaffFilter] = useState("all");
   const [data , setdata] = useState([]);
-
+  const [date , setDate] = useState(new Date().toISOString().split("T")[0]);
   useEffect(()=>{
-    fetch(`http://localhost:8080/visitors/`)
+    fetch(`http://localhost:8080/visitors/checkedin/${date}` , {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
+      }
+    })
     .then((response)=>{
       if(!response.ok){
         throw new Error("Response was not ok")
@@ -18,12 +25,10 @@ function VisitorReport() {
       return response.json();
     })
     .then((data)=>{
-   
       setdata(data);
     })
     .catch((error)=>{console.log("Error in fetching Visitors", error);});
-
-  },[]);
+  },[date]);
 
   const CSVgenerator = (data) => {
     const array = Array.isArray(data) ? data : [data];
@@ -99,6 +104,7 @@ function VisitorReport() {
               name="date"
               id="date"
               defaultValue={new Date().toISOString().split("T")[0]}
+              onChange={(e) => setDate( e.target.value)}
             />
           </div>
           <div className="flex items-center gap-2 border border-gray-300 px-3 py-2 rounded-md">
