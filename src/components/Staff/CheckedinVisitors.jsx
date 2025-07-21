@@ -5,7 +5,7 @@ import { UserRoundSearch, LogOut, ChevronDown, ChevronUp , UserRoundX } from 'lu
 
 function formatTime(timeStr) {
   const date = new Date(timeStr);
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit',hour12:false });
 }
 
 // function formatDateTime(dateStr) {
@@ -22,7 +22,7 @@ function formatDateTime(dateStr) {
   return `${date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
-  })}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  })}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit',hour12:false })}`;
 }
 
 
