@@ -92,8 +92,8 @@ const handleCheckout = (id) => {
   // filter
   const filteredVisitors = visitors.filter((v) => {
     const matchesSearch =
-      v.name.toLowerCase().includes(search.toLowerCase()) ||
-      v.mobile.includes(search);
+      v.name?.toLowerCase().includes(search.toLowerCase()) ||
+      v.mobile?.toString().includes(search);
     // const matchesStatus =
     //   statusFilter === 'all' || v.status === statusFilter;
     // return matchesSearch && matchesStatus;
