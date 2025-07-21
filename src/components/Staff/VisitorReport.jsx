@@ -8,9 +8,10 @@ import { autoTable } from "jspdf-autotable";
 function VisitorReport() {
   const [staffFilter, setStaffFilter] = useState("all");
   const [data , setdata] = useState([]);
-  const [date , setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [startDate , setStartDate] = useState(new Date().toISOString().split("T")[0]);
+  const [endDate , setEndDate] = useState(new Date().toISOString().split("T")[0]);
   useEffect(()=>{
-    fetch(`http://localhost:8080/visitors/checkedin/${date}` , {
+    fetch(`http://localhost:8080/visitors/checkedin/${startDate}/${endDate}` , {
       method: "GET",
       credentials: "include",
       headers: {
@@ -28,11 +29,15 @@ function VisitorReport() {
       setdata(data);
     })
     .catch((error)=>{console.log("Error in fetching Visitors", error);});
-  },[date]);
+  },[startDate , endDate, staffFilter]);
 
   const CSVgenerator = (data) => {
     const array = Array.isArray(data) ? data : [data];
-    const headers = Object.keys(array[0]);
+    const excludedFields = ["status", "version"];
+    // Filter headers
+    const headers = Object.keys(array[0]).filter(
+      (key) => !excludedFields.includes(key)
+    );
     const csvRows = [
       headers.join(","), // header row
       ...array.map((row) =>
@@ -98,16 +103,28 @@ function VisitorReport() {
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-md">
+          <div className="flex items-center gap-2 px-3 py-2">
+            <label htmlFor="startdate">Start Date: </label>
             <input
               type="date"
-              name="date"
-              id="date"
+              name="startdate"
+              id="startdate"
               defaultValue={new Date().toISOString().split("T")[0]}
-              onChange={(e) => setDate( e.target.value)}
+              onChange={(e) => setStartDate( e.target.value)}
+              className="border border-gray-300 px-3 py-2 rounded-md"
+            />
+
+            <label htmlFor="enddate" className="md:ml-4">End Date: </label>
+            <input
+              type="date"
+              name="enddate"
+              id="enddate"
+              defaultValue={new Date().toISOString().split("T")[0]}
+              onChange={(e) => setEndDate( e.target.value)}
+              className="border border-gray-300 px-3 py-2 rounded-md"
             />
           </div>
-          <div className="flex items-center gap-2 border border-gray-300 px-3 py-2 rounded-md">
+          {/* <div className="flex items-center gap-2 border border-gray-300 px-3 py-2 rounded-md">
             <Filter size={16} />
             <select
               value={staffFilter}
@@ -118,7 +135,7 @@ function VisitorReport() {
               <option value="hr">HR Director</option>
               <option value="it">IT Manager</option>
             </select>
-          </div>
+          </div> */}
         </div>
         <div className="flex gap-2 flex-wrap">
           <button
