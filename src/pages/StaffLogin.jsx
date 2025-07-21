@@ -19,10 +19,10 @@ function StaffLogin() {
         'password' : password
     }
 
-    fetch('')
-    .then((res) => res.json())
-    .then((data) => console.log(data))
-    .error((err) => console.log(err))
+    // fetch('')
+    // .then((res) => res.json())
+    // .then((data) => console.log(data))
+    // .error((err) => console.log(err))
 
     setIsLoading(false)
     navigate('/dashboard')

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { UserRoundSearch, LogOut, ChevronDown, ChevronUp , UserRoundX } from 'lucide-react';
+import { useRef } from 'react';
+import { UserRoundSearch, LogOut, ChevronDown, ChevronUp , UserRoundX, Search } from 'lucide-react';
 
 const initialVisitors = [
   {
@@ -59,10 +60,13 @@ function formatDateTime(dateStr) {
 
 const CheckedinVisitors = () => {
 
+  const inputRef = useRef(null);
+
   const [visitors, setVisitors] = useState(initialVisitors);
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  // const [statusFilter, setStatusFilter] = useState('all');
   const [expandedCard, setExpandedCard] = useState(null);
+
 
   const handleCheckout = (id) => {
     setVisitors((prev) =>
@@ -85,13 +89,23 @@ const CheckedinVisitors = () => {
 
   // filter
   const filteredVisitors = visitors.filter((v) => {
+    // search
     const matchesSearch =
       v.name.toLowerCase().includes(search.toLowerCase()) ||
       v.mobile.includes(search);
-    const matchesStatus =
-      statusFilter === 'all' || v.status === statusFilter;
-    return matchesSearch && matchesStatus;
+
+    return matchesSearch
+    
+    // filter
+    // const matchesStatus =
+    //   statusFilter === 'all' || v.status === statusFilter;
+    // return matchesSearch && matchesStatus;
   });
+
+
+  const handleIconClick = () => {
+    inputRef.current?.focus(); // focus input and open keyboard on mobile
+  };
 
 
   return (
@@ -102,16 +116,25 @@ const CheckedinVisitors = () => {
       </h2>
 
       {/* Search & Filter */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
+      <div className="flex  md:flex-row gap-4 mb-6">
         <input
           type="text"
           placeholder="Search visitors..."
           className="w-full md:w-1/2 px-4 py-2 rounded-md border border-gray-300"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          ref={inputRef}
         />
+        <button
+        onClick={handleIconClick}
+        type="button"
+        className="ml-2 text-gray-400 hover:text-gray-700 cursor-pointer"
+      >
+        <Search size={36} strokeWidth={1}/>
+      </button>
 
-        <select
+
+        {/* <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           className="w-full md:w-48 px-4 py-2 rounded-md border border-gray-300 bg-white"
@@ -119,9 +142,9 @@ const CheckedinVisitors = () => {
           <option value="all">All Status</option>
           <option value="checked-in">Checked In</option>
           <option value="checked-out">Checked Out</option>
-        </select>
+        </select> */}
       </div>
-
+ 
       {/*  Cards */}
       { filteredVisitors.length > 0 ?
       <div className=" space-y-4">
