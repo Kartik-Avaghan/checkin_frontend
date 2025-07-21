@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router';
+import { Navigate, Outlet, useNavigate } from 'react-router';
+useNavigate
 
 function Auth() {
   const [isStaff, setIsStaff] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
+    if(!token){
+      navigate("/login")
+    }
     
     if (token && token.startsWith("Bearer ")) {
       
@@ -45,6 +51,8 @@ function Auth() {
   if (loading) {
     return <p>Loading...</p>;
   }
+
+
 
   return isStaff ? <Outlet /> : <Navigate to="/login" />;
 }

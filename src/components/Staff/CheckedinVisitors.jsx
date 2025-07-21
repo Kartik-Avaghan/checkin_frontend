@@ -11,7 +11,7 @@ import { useRef } from "react";
 
 function formatTime(timeStr) {
   const date = new Date(timeStr);
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit',hour12:false });
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 function formatDateTime(dateStr) {
@@ -19,7 +19,7 @@ function formatDateTime(dateStr) {
   return `${date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
-  })}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit',hour12:false })}`;
+  })}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 }
 
 const CheckedinVisitors = () => {

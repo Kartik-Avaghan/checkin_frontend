@@ -7,7 +7,8 @@ function StaffNav() {
   const navigate = useNavigate()
 
   function handlelogout(){
-    navigate('/')
+    localStorage.removeItem("token");
+    navigate('/login')
   }
 
   return (
