@@ -26,13 +26,13 @@ function CheckinForm() {
 
     fetch("http://localhost:8080/visitors/add", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
-        ...formData,
-        status: true,
-        checkInTime: new Date().toISOString(),
+        ...formData
       }),
     })
       .then((response) => {
@@ -45,7 +45,7 @@ function CheckinForm() {
       .then((data) => {
         console.log("Visitor added:", data);
         setFormData({ name: "", mobile: "", visiting: "", purpose: "" });
-        navigate("/dashboard");
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error adding visitor:", error);

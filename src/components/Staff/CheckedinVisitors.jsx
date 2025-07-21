@@ -29,6 +29,7 @@ const CheckedinVisitors = () => {
   // const [statusFilter, setStatusFilter] = useState('all');
   const [expandedCard, setExpandedCard] = useState(null);
   const inputRef = useRef();
+  const [update, setUpdate] = useState();
 
   useEffect(() => {
     fetch(`http://localhost:8080/visitors/checkedin` ,
@@ -49,24 +50,30 @@ const CheckedinVisitors = () => {
       })
       .then((data) => setVisitors(data))
       .catch((error) => console.log("Error fetching visitors:", error));
-  }, []);
+  }, [update]);
 
   const handleCheckout = (id) => {
     fetch(`http://localhost:8080/visitors/checkout/${id}`, {
       method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
+      },
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to checkout");
-        }
-        return response.json();
-      })
-      .then((updatedVisitor) => {
-        setVisitors((preData) =>
-          preData.map((v) => (v.id === updatedVisitor.id ? updatedVisitor : v))
-        );
-      })
-      .catch((error) => console.log("Error during checkout:", error));
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to checkout");
+      }
+      return response.json();
+    })
+    .then((updatedVisitor) => {
+      setVisitors((preData) =>
+        preData.map((v) => (v.id === updatedVisitor.id ? updatedVisitor : v))
+      );
+    })
+    .catch((error) => console.log("Error during checkout:", error))
+    .finally(() => { setUpdate(id); });
   };
 
   const handleIconClick = () => {

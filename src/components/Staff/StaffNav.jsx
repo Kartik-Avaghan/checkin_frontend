@@ -22,7 +22,7 @@ function StaffNav() {
         <div className="flex flex-col p-6 space-y-4 text-lg font-medium">
           <button onClick={() => setToggle(false)}><X className="text-white cursor-pointer" /></button>
 
-          <Link to={"/dashboard"}>
+          <Link to={"/"}>
           <button className="hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">Home</button> </Link>
           <Link to={"/report"}>
           <button className="hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">Reports</button> </Link>
