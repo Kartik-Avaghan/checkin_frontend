@@ -6,23 +6,47 @@ function Auth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Check saved token
+    const token = localStorage.getItem("token");
     
     if (token && token.startsWith("Bearer ")) {
-      // Here we just check existence, not server verification
-      setIsStaff(true);
+      
+      fetch("http://localhost:8080/auth/verify-token", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        }})
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Not authorized");
+        }
+        return response.text();
+      }).then((data) => {
+        const role = data.replace(/[\[\]"]+/g, '');
+        if (role === "ROLE_STAFF") {
+          setIsStaff(true);
+        } else {
+          setIsStaff(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error verifying token:", error);
+        setIsStaff(false);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
     } else {
       setIsStaff(false);
     }
-
-    setLoading(false);
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>; // Optional loader while checking token
+    return <p>Loading...</p>;
   }
 
-  return isStaff ? <Outlet /> : <Navigate to="/" />;
+  return isStaff ? <Outlet /> : <Navigate to="/login" />;
 }
 
 export default Auth;
