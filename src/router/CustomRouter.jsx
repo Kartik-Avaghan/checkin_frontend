@@ -10,16 +10,14 @@ import Auth from './Auth'
 function CustomRouter() {
   return (
     <Routes>
-      <Route path='/' element={<StaffLogin/>}/>
+      <Route path='/login' element={<StaffLogin/>}/>
 
 
-      {/* <Route element={<Auth/>}> */}
-      <Route path='/dashboard' element={<StaffDashboard/>} />
-      <Route path='/checkin' element={<CheckinForm/>}/>
-      <Route path='/report' element={<Report/>}/>
-      <Route path='/staff' element={<Auth/>}/>
-        
-      {/* </Route> */}
+      <Route path='/' element={<Auth/>}>
+        <Route path='/' element={<StaffDashboard/>} />
+        <Route path='checkin' element={<CheckinForm/>}/>
+        <Route path='report' element={<Report/>}/>
+      </Route>
       
     </Routes>
   )
