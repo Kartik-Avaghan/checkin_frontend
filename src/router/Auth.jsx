@@ -5,10 +5,13 @@ useNavigate
 
 function Auth() {
   const [isStaff, setIsStaff] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
   useEffect(() => {
+
+    setLoading(true);
+    
     const token = localStorage.getItem("token");
 
     if(!token){

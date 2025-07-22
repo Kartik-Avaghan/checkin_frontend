@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes , Route } from 'react-router'
 
 import StaffLogin from '../pages/StaffLogin'
@@ -17,10 +16,6 @@ function CustomRouter() {
         <Route path='/' element={<StaffDashboard/>} />
         <Route path='checkin' element={<Checkin/>}/>
         <Route path='report' element={<Report/>}/>
-      </Route>
-
-      <Route path='/admin' element={<Auth/>} >
-        <Route path='dashboard' element={<StaffDashboard/>} />
       </Route>
 
       <Route path='*' element={<NotFound/>} />
