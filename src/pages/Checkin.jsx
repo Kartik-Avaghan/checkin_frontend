@@ -2,16 +2,21 @@ import { useState } from "react";
 import StaffNav from "../components/Staff/StaffNav";
 import { UserPlus } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useToast } from "../components/ToastProvider";
+import Loader from "../components/Loader";
 
 function Checkin() {
+
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
     visiting: "",
     purpose: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   let navigate = useNavigate();
+  const {addToast} = useToast();
 
   const handleChanges = (e) => {
     const { name, value } = e.target;
@@ -23,6 +28,7 @@ function Checkin() {
 
   function handleCheckin(e) {
     e.preventDefault();
+    setIsLoading(true);
 
     fetch("http://localhost:8080/visitors/add", {
       method: "POST",
@@ -41,15 +47,17 @@ function Checkin() {
       }
       return response.json();
     })
-
     .then((data) => {
       console.log("Visitor added:", data);
       setFormData({ name: "", mobile: "", visiting: "", purpose: "" });
+      console.log("Navigating...");
       navigate("/");
     })
     .catch((error) => {
       console.error("Error adding visitor:", error);
-      alert("Could not check in visitor. Please try again.");
+      addToast("Could not check in visitor. Please try again.", "error");
+    }).finally(() => {
+      setIsLoading(false);
     });
   }
 
@@ -57,15 +65,16 @@ function Checkin() {
     <div>
       <StaffNav />
       <div>
+        {isLoading &&  <Loader />}
         <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl mt-10">
           <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
             <UserPlus className="text-blue-600" />
             Visitor Check-in
           </h2>
 
-          <form className="space-y-6">
-            {/* Visitor Name & Mobile */}
+          <form className="space-y-6" onSubmit={handleCheckin}>
 
+            {/* Visitor Name & Mobile */}
             <div className="">
               <label className="block font-medium text-gray-700 mb-1">
                 Visitor Name *
@@ -91,6 +100,7 @@ function Checkin() {
                 placeholder="Enter mobile number"
                 className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
+                pattern="[0-9]{10}"
                 defaultValue={formData.mobile}
                 onChange={handleChanges}
               />
@@ -143,7 +153,6 @@ function Checkin() {
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-3 rounded-md flex items-center justify-center gap-2 hover:bg-blue-700 transition text-md"
-              onClick={handleCheckin}
             >
               <UserPlus size={18} /> Check In Visitor
             </button>

@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useToast } from '../components/ToastProvider';
-
+import Loader from '../components/Loader';
 function StaffLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const {addToast} = useToast();
@@ -23,7 +22,7 @@ function StaffLogin() {
     })
     .then((res) => {
       if (!res.ok) {
-          throw new Error("Invalid username or password");
+        throw new Error("Invalid username or password");
       }
       return res.text(); // Backend returns token as plain text
     })
@@ -32,11 +31,14 @@ function StaffLogin() {
       navigate("/");
     })
     .catch((err) => {
-      setError(err.message);
       addToast("Invalid username or password", "error");
     })
     .finally(() => { setIsLoading(false); });
   };
+
+  if(isLoading){
+    return <Loader />;
+  }
 
   return (
     <div>

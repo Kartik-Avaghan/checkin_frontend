@@ -19,6 +19,10 @@ function CustomRouter() {
         <Route path='report' element={<Report/>}/>
       </Route>
 
+      <Route path='/admin' element={<Auth/>} >
+        <Route path='dashboard' element={<StaffDashboard/>} />
+      </Route>
+
       <Route path='*' element={<NotFound/>} />
       
     </Routes>

@@ -53,8 +53,6 @@ function Auth() {
     return <Loader/>;
   }
 
-
-
   return isStaff ? <Outlet /> : <Navigate to="/login" />;
 }
 
