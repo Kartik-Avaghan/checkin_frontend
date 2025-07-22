@@ -51,10 +51,8 @@ function formatMinutes(totalMinutes) {
 }
 
 
-
-
-
 function VisitorReport() {
+
   const [staffFilter, setStaffFilter] = useState("all");
   const [data , setdata] = useState([]);
   const [startDate , setStartDate] = useState(new Date().toISOString().split("T")[0]);

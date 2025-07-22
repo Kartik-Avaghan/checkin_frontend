@@ -1,38 +1,44 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { X } from 'lucide-react';
-
+import { useToast } from '../components/ToastProvider';
+import Loader from '../components/Loader';
 function StaffLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  const {addToast} = useToast();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setIsLoading(true);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-        fetch("http://localhost:8080/auth/login", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password })
-        })
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error("Invalid username or password");
-            }
-            return res.text(); // Backend returns token as plain text
-        })
-        .then((token) => {
-            localStorage.setItem("token", token); 
-            navigate("/");
-        })
-        .catch((err) => {setError(err.message); })
-        .finally(() => { setIsLoading(false); });
-    };
+    fetch("http://localhost:8080/auth/login", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Invalid username or password");
+      }
+      return res.text(); // Backend returns token as plain text
+    })
+    .then((token) => {
+      localStorage.setItem("token", token); 
+      navigate("/");
+    })
+    .catch((err) => {
+      addToast("Invalid username or password", "error");
+    })
+    .finally(() => { setIsLoading(false); });
+  };
+
+  if(isLoading){
+    return <Loader />;
+  }
 
   return (
     <div>
@@ -85,13 +91,8 @@ function StaffLogin() {
               </form>
             </div>
           </div>
-
-            { error && <div className="text-white text-center mt-4 py-2 px-4 rounded-md bg-red-500 flex gap-5"> <X onClick={() => setError(false)}/>  Invalid Username or Password </div>}
-
-
         </div>
       </section>
-
     </div>
   );
 }

@@ -6,6 +6,7 @@ import {
   ChevronUp,
   UserRoundX,
   Search,
+  Phone,
 } from "lucide-react";
 import { useRef } from "react";
 
@@ -97,7 +98,6 @@ const CheckedinVisitors = () => {
     //   statusFilter === 'all' || v.status === statusFilter;
     // return matchesSearch && matchesStatus;
 
-
   });
 
   return (
@@ -147,8 +147,8 @@ const CheckedinVisitors = () => {
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <div className="text-lg font-bold p-2">{v.name}</div>
-                  <div className="text-sm text-gray-600 pl-2">{v.mobile}</div>
+                  <div className="text-xl font-bold p-2">{v.name}</div>
+                  <div className="text-sm text-gray-600 pl-2 flex gap-1 items-center"><Phone size={15}/>+91 {v.mobile}</div>
                 </div>
                 <div className="flex gap-2 items-center">
                   {/* Check Out Button */}
