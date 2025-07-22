@@ -59,6 +59,8 @@ function VisitorReport() {
   const [data , setdata] = useState([]);
   const [startDate , setStartDate] = useState(new Date().toISOString().split("T")[0]);
   const [endDate , setEndDate] = useState(new Date().toISOString().split("T")[0]);
+
+  
   useEffect(()=>{
     fetch(`http://localhost:8080/visitors/checkedin/${startDate}/${endDate}` , {
       method: "GET",
@@ -107,39 +109,81 @@ function VisitorReport() {
     link.click();
   };
 
-  const downloadPDF = () => {
-    const doc = new jsPDF();
 
-    doc.setFontSize(18);
-    doc.text("Visitor Report", 14, 20);
 
-    autoTable(doc, {
-      startY: 30,
-      head: [
-        [
-          "Name",
-          "Mobile",
-          "Checked In Time",
-          "Checked Out Time",
-          "Duration",
-          "Visiting Person",
-          "Purpose",
-        ],
+const downloadPDF = () => {
+  const doc = new jsPDF();
+
+  doc.setFontSize(18);
+  doc.text("Visitor Report", 14, 20);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [
+      [
+        "Name",
+        "Mobile",
+        "Checked In",
+        "Checked Out",
+        "Duration",
+        "Visiting Person",
+        "Purpose",
       ],
-      body: data.map((item) => [
-  item.name,
-  item.mobile,
-  item.checkinTime ? formatDateTime(item.checkinTime) : "-",
-  item.checkoutTime ? formatDateTime(item.checkoutTime) : "-",
-  item.duration,
-  item.visiting,
-  item.purpose,
-]),
-      theme: "striped",
-    });
+    ],
+    body: data.map((item) => [
+      item.name,
+      item.mobile,
+      item.checkinDate && item.checkinTime
+        ? formatDateTime(item.checkinDate, item.checkinTime)
+        : "-",
+      item.checkoutDate && item.checkoutTime
+        ? formatDateTime(item.checkoutDate, item.checkoutTime)
+        : "-",
+      formatMinutes(item.duration),
+      item.visiting,
+      item.purpose,
+    ]),
+    theme: "striped",
+  });
 
-    doc.save("visitor_report.pdf");
-  };
+  doc.save("visitor_report.pdf");
+};
+
+
+
+//   const downloadPDF = () => {
+//     const doc = new jsPDF();
+
+//     doc.setFontSize(18);
+//     doc.text("Visitor Report", 14, 20);
+
+//     autoTable(doc, {
+//       startY: 30,
+//       head: [
+//         [
+//           "Name",
+//           "Mobile",
+//           "Checked In Time",
+//           "Checked Out Time",
+//           "Duration",
+//           "Visiting Person",
+//           "Purpose",
+//         ],
+//       ],
+//       body: data.map((item) => [
+//   item.name,
+//   item.mobile,
+//   item.checkinTime ? formatDateTime(item.checkinDate, item.checkinTime) : "-",
+//   item.checkoutTime ? formatDateTime(item.checkoutDate, item.checkoutTime) : "-",
+//   item.duration,
+//   item.visiting,
+//   item.purpose,
+// ]),
+//       theme: "striped",
+//     });
+
+//     doc.save("visitor_report.pdf");
+//   };
 
   return (
 
