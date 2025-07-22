@@ -1,28 +1,15 @@
 import { useEffect, useState } from "react";
-import { CalendarDays, Download, Filter , File , Clock4 , Phone , CircleAlert } from "lucide-react";
+import { Download, File , Clock4 , Phone , CircleAlert } from "lucide-react";
 
 import jsPDF from "jspdf";
 import { autoTable } from "jspdf-autotable";
 
-
-
-// function formatTime(timeStr) {
-//   const date = new Date(timeStr);
-//   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-// }
-
-// function formatDateTime(dateStr) {
-//   const date = new Date(dateStr);
-//   return `${date.toLocaleDateString('en-US', {
-//     month: 'short',
-//     day: 'numeric',
-//   })}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-// }
+import { useToast } from "../../components/ToastProvider";
 
 function formatTime(timeStr) {
   if (!timeStr) return "-"; // handle empty, null, undefined
 
-  const today = new Date().toISOString().split('T')[0]; // "2025-07-21"
+  const today = new Date().toISOString().split('T')[0]; // "current date"
   const date = new Date(`${today}T${timeStr}`); // combine date + time
 
   if (isNaN(date)) return "-"; // invalid input
@@ -30,14 +17,6 @@ function formatTime(timeStr) {
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-function formatDateTime(dateStr, timeStr) {
-  if (!dateStr || !timeStr) return "-";
-  const isoString = `${dateStr}T${timeStr}`;
-  const date = new Date(isoString);
-  return isNaN(date.getTime())
-    ? "-"
-    : `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-}
 
 function formatMinutes(totalMinutes) {
   if (isNaN(totalMinutes) || totalMinutes < 0) return "-";
@@ -57,7 +36,7 @@ function VisitorReport() {
   const [data , setdata] = useState([]);
   const [startDate , setStartDate] = useState(new Date().toISOString().split("T")[0]);
   const [endDate , setEndDate] = useState(new Date().toISOString().split("T")[0]);
-
+  const {addToast} = useToast();
   
   useEffect(()=>{
     fetch(`http://localhost:8080/visitors/checkedin/${startDate}/${endDate}` , {
@@ -79,6 +58,7 @@ function VisitorReport() {
       setdata(data);
     })
     .catch((error)=>{console.log("Error in fetching Visitors", error);});
+
   },[startDate , endDate, staffFilter]);
 
   const CSVgenerator = (data) => {
@@ -109,112 +89,98 @@ function VisitorReport() {
 
 
 
-const downloadPDF = () => {
-  const doc = new jsPDF();
+  const downloadPDF = () => {
+    const doc = new jsPDF();
 
-  doc.setFontSize(18);
-  doc.text("Visitor Report", 14, 20);
+    doc.setFontSize(18);
+    doc.text("Visitors Report", 14, 20);
+    doc.setFontSize(12);
+    doc.text(`From: ${ new Date(startDate).toLocaleDateString("IN")}   To: ${new Date(endDate).toLocaleDateString("IN")}`, 14, 29);
 
-  autoTable(doc, {
-    startY: 30,
-    head: [
-      [
-        "Name",
-        "Mobile",
-        "Checked In",
-        "Checked Out",
-        "Duration",
-        "Visiting Person",
-        "Purpose",
+    autoTable(doc, {
+      startY: 35,
+      margin: { top: 10, bottom: 10, left: 10, right: 8 },
+      head: [
+        [
+          "Name",
+          "Mobile",
+          "Check-in Date",
+          "Checked In",
+          "Checked Out",
+          "Duration",
+          "Visiting Person",
+          "Purpose",
+        ],
       ],
-    ],
-    body: data.map((item) => [
-      item.name,
-      item.mobile,
-      item.checkinDate && item.checkinTime
-        ? formatDateTime(item.checkinDate, item.checkinTime)
-        : "-",
-      item.checkoutDate && item.checkoutTime
-        ? formatDateTime(item.checkoutDate, item.checkoutTime)
-        : "-",
-      formatMinutes(item.duration),
-      item.visiting,
-      item.purpose,
-    ]),
-    theme: "striped",
-  });
-
-  doc.save("visitor_report.pdf");
-};
+      body: data.map((item) => [
+        item.name,
+        item.mobile,
+        item.checkinDate ? new Date(item.checkinDate).toLocaleDateString("in") : "-",
+        item.checkinTime ? formatTime(item.checkinTime) : "-",
+        item.checkoutTime ? formatTime(item.checkoutTime) : "-",
+        formatMinutes(item.duration),
+        item.visiting,
+        item.purpose,
+      ]),
+      theme: "striped",
+    });
+    doc.save(`${new Date(startDate).toLocaleDateString("in")}-${new Date(endDate).toLocaleDateString("in")} visitors_report.pdf`);
+  };
 
 
+  // date validations
+  useEffect(() => {
 
-//   const downloadPDF = () => {
-//     const doc = new jsPDF();
+    if(endDate > new Date().toISOString().split("T")[0]) {
+      addToast("End date cannot be Greater than Current Date", "warning"); 
+      setEndDate(new Date().toISOString().split("T")[0]); // Reset to current date
+    }
 
-//     doc.setFontSize(18);
-//     doc.text("Visitor Report", 14, 20);
+    if(endDate < startDate) {
+      addToast("End date cannot be before start date" , "warning");
+      setEndDate(new Date().toISOString().split("T")[0]); // Reset to current date
+    }
 
-//     autoTable(doc, {
-//       startY: 30,
-//       head: [
-//         [
-//           "Name",
-//           "Mobile",
-//           "Checked In Time",
-//           "Checked Out Time",
-//           "Duration",
-//           "Visiting Person",
-//           "Purpose",
-//         ],
-//       ],
-//       body: data.map((item) => [
-//   item.name,
-//   item.mobile,
-//   item.checkinTime ? formatDateTime(item.checkinDate, item.checkinTime) : "-",
-//   item.checkoutTime ? formatDateTime(item.checkoutDate, item.checkoutTime) : "-",
-//   item.duration,
-//   item.visiting,
-//   item.purpose,
-// ]),
-//       theme: "striped",
-//     });
+    if(startDate > endDate) {
+      addToast("Start date cannot be after end date" , "warning");
+      setStartDate(new Date().toISOString().split("T")[0]); // Reset to current date
+    }
 
-//     doc.save("visitor_report.pdf");
-//   };
+  },[endDate , startDate]);
+
 
   return (
-
-
-
     <div className="max-w-6xl mx-auto p-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
         <div>
-          <h2 className="text-2xl font-bold">Visitor Reports</h2>
+          <h2 className="text-2xl font-bold">Visitors Reports</h2>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-2 px-3 py-2">
-            <label htmlFor="startdate">Start Date: </label>
-            <input
-              type="date"
-              name="startdate"
-              id="startdate"
-              defaultValue={new Date().toISOString().split("T")[0]}
-              onChange={(e) => setStartDate( e.target.value)}
-              className="border border-gray-300 px-3 py-2 rounded-md"
-            />
-
-            <label htmlFor="enddate" className="md:ml-4">End Date: </label>
-            <input
-              type="date"
-              name="enddate"
-              id="enddate"
-              defaultValue={new Date().toISOString().split("T")[0]}
-              onChange={(e) => setEndDate( e.target.value)}
-              className="border border-gray-300 px-3 py-2 rounded-md"
-            />
+          <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
+            <div>
+              <label htmlFor="startdate">Start Date: </label>
+              <input
+                type="date"
+                name="startdate"
+                id="startdate"
+                value={startDate}
+                onChange={(e) => setStartDate( e.target.value)}
+                className="border border-gray-300 px-3 py-2 rounded-md ml-2"
+              />
+            </div>
+            <div>
+              <label htmlFor="enddate" className="lg:ml-4">End Date: </label>
+              <input
+                type="date"
+                name="enddate"
+                id="enddate"
+                value={endDate}
+                onChange={(e) => setEndDate( e.target.value)}
+                className="border border-gray-300 px-3 py-2 rounded-md ml-2"
+              />
+            </div>
           </div>
           {/* <div className="flex items-center gap-2 border border-gray-300 px-3 py-2 rounded-md">
             <Filter size={16} />
@@ -257,9 +223,10 @@ const downloadPDF = () => {
               className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm"
             >
               <div className="flex justify-between">
+                
                 <div>
                   <div className="text-lg font-semibold">{v.name}</div>
-                  <div className="text-sm text-gray-600 mt-1">{v.mobile}</div>
+                  <div className="text-sm text-gray-600 mt-1 flex items-center gap-1"><Phone size={12}/> {v.mobile}</div>
                 </div>
                 <div className="mt-2 ">
                   {v.status === true ? (
@@ -277,17 +244,16 @@ const downloadPDF = () => {
               <div className="flex gap-5 items-center">
                 <div className="text-sm mt-2">
                   <strong>Check-in:</strong> {v.checkinTime ? formatTime(v.checkinTime) : "-"}
-                   
-
                 </div>
                 <div className="text-sm mt-2">
                   <strong>Check-out:</strong> {v.checkoutTime ? formatTime(v.checkoutTime) : "-"}
                 </div>
               </div>
 
+              { v.checkoutTime && 
               <div className="text-sm mt-1 flex items-center gap-1">
                 <Clock4 size={16} /> Duration: {formatMinutes(v.duration) || "- -"}
-              </div>
+              </div> }
 
               <div className="flex mt-2 text-sm text-gray-700 gap-4 sm:gap-5 flex-wrap">
                 <div>
@@ -297,6 +263,7 @@ const downloadPDF = () => {
                   <strong>Purpose:</strong> {v.purpose}
                 </div>
               </div>
+
             </div>
           ))}
         </div>
@@ -356,8 +323,7 @@ const downloadPDF = () => {
         </div>
       )}
     </div>
-
-      );
+  );
 }
 
 export default VisitorReport;
