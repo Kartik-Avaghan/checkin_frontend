@@ -3,7 +3,7 @@ import StaffNav from "../components/Staff/StaffNav";
 import { UserPlus } from "lucide-react";
 import { useNavigate } from "react-router";
 
-function CheckinForm() {
+function Checkin() {
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -35,29 +35,29 @@ function CheckinForm() {
         ...formData
       }),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to add visitor");
-        }
-        return response.json();
-      })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to add visitor");
+      }
+      return response.json();
+    })
 
-      .then((data) => {
-        console.log("Visitor added:", data);
-        setFormData({ name: "", mobile: "", visiting: "", purpose: "" });
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("Error adding visitor:", error);
-        alert("Could not check in visitor. Please try again.");
-      });
+    .then((data) => {
+      console.log("Visitor added:", data);
+      setFormData({ name: "", mobile: "", visiting: "", purpose: "" });
+      navigate("/");
+    })
+    .catch((error) => {
+      console.error("Error adding visitor:", error);
+      alert("Could not check in visitor. Please try again.");
+    });
   }
 
   return (
     <div>
       <StaffNav />
       <div>
-        <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-2xl mt-10">
+        <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl mt-10">
           <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
             <UserPlus className="text-blue-600" />
             Visitor Check-in
@@ -154,4 +154,4 @@ function CheckinForm() {
   );
 }
 
-export default CheckinForm;
+export default Checkin;

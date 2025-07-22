@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router';
+import Loader from '../components/Loader';
 useNavigate
 
 function Auth() {
@@ -49,7 +50,7 @@ function Auth() {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loader/>;
   }
 
 

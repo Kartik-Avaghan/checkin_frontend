@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 
 import StaffNav from '../components/Staff/StaffNav'
 import CheckedinVisitors from '../components/Staff/CheckedinVisitors'
-import CheckinForm from './CheckinForm'
+import CheckinForm from './Checkin'
 
 
 

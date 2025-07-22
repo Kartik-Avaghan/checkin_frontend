@@ -51,14 +51,13 @@ function formatMinutes(totalMinutes) {
 }
 
 
-
-
-
 function VisitorReport() {
+
   const [staffFilter, setStaffFilter] = useState("all");
   const [data , setdata] = useState([]);
   const [startDate , setStartDate] = useState(new Date().toISOString().split("T")[0]);
   const [endDate , setEndDate] = useState(new Date().toISOString().split("T")[0]);
+
   useEffect(()=>{
     fetch(`http://localhost:8080/visitors/checkedin/${startDate}/${endDate}` , {
       method: "GET",
@@ -127,14 +126,14 @@ function VisitorReport() {
         ],
       ],
       body: data.map((item) => [
-  item.name,
-  item.mobile,
-  item.checkinTime ? formatDateTime(item.checkinTime) : "-",
-  item.checkoutTime ? formatDateTime(item.checkoutTime) : "-",
-  item.duration,
-  item.visiting,
-  item.purpose,
-]),
+        item.name,
+        item.mobile,
+        item.checkinTime ? formatDateTime(item.checkinTime) : "-",
+        item.checkoutTime ? formatDateTime(item.checkoutTime) : "-",
+        item.duration,
+        item.visiting,
+        item.purpose,
+      ]),
       theme: "striped",
     });
 
