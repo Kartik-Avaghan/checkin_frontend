@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, Outlet, useNavigate } from 'react-router';
-import Loader from '../components/Loader';
-useNavigate
+import { Navigate, Outlet, useNavigate , useLocation } from 'react-router';
+import Loader from '../../components/Loader';
 
 function Auth() {
   const [isStaff, setIsStaff] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
+  const location = useLocation();
 
   useEffect(() => {
-
-    setLoading(true);
     
     const token = localStorage.getItem("token");
 
     if(!token){
+      setLoading(false);
       navigate("/login")
+      return;
     }
     
     if (token && token.startsWith("Bearer ")) {
@@ -31,9 +31,13 @@ function Auth() {
           throw new Error("Not authorized");
         }
         return response.text();
-      }).then((data) => {
-        const role = data.replace(/[\[\]"]+/g, '');
-        if (role === "ROLE_STAFF") {
+      })
+      .then((data) => {
+        const role = data.replace(/[\[\]"]+/g, '').trim();
+        if( role === "ROLE_ADMIN") {
+          navigate("/admin/dashboard");
+        }
+        if(role === "ROLE_STAFF") {
           setIsStaff(true);
         } else {
           setIsStaff(false);
@@ -41,20 +45,25 @@ function Auth() {
       })
       .catch((error) => {
         console.error("Error verifying token:", error);
+        localStorage.removeItem("token");
+        navigate("/login");
         setIsStaff(false);
       })
       .finally(() => {
         setLoading(false);
       });
-
     } else {
       setIsStaff(false);
+      setLoading(false);
     }
   }, []);
 
-  if (loading) {
-    return <Loader/>;
-  }
+  if (loading) return <Loader/>;
+
+  // const isAdminroute = location.pathname.startsWith("/admin");
+  // if (isAdminroute && isStaff) {
+  //   return <Navigate to="/" />;
+  // }
 
   return isStaff ? <Outlet /> : <Navigate to="/login" />;
 }
