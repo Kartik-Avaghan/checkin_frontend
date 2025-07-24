@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Download, File , Clock4 , Phone , CircleAlert } from "lucide-react";
+import { Download, File , Clock4 , Phone , CircleAlert , ChartGantt } from "lucide-react";
 
 import jsPDF from "jspdf";
 import { autoTable } from "jspdf-autotable";
@@ -319,7 +319,7 @@ function VisitorReport() {
         </div>
       ) : (
         <div className="hidden lg:flex items-center justify-center gap-3 mt-50 text-3xl text-gray-800 font-medium">
-          <CircleAlert size={30} /> <span> No Data found </span>
+          <ChartGantt size={30} /> <span> No Data found </span>
         </div>
       )}
     </div>

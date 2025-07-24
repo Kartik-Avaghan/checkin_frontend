@@ -55,7 +55,8 @@ function Checkin() {
       console.log("Visitor added:", data);
       setFormData({ name: "", mobile: "", visiting: "", purpose: "" });
       console.log("Navigating...");
-      navigate("/");
+      {isAdmin ? navigate("/admin/dashboard") : navigate("/") }
+      addToast("Visitor checked in successfully!", "success");
     })
     .catch((error) => {
       console.error("Error adding visitor:", error);
