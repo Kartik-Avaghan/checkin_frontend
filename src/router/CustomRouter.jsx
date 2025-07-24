@@ -6,6 +6,7 @@ import Checkin from '../pages/Checkin'
 import Report from '../pages/Report'
 import Auth from './Auth'
 import NotFound from '../pages/NotFound'
+import Dashboard from '../pages/Admin/Dashboard'
 
 function CustomRouter() {
   return (
@@ -19,6 +20,7 @@ function CustomRouter() {
       </Route>
 
       <Route path='*' element={<NotFound/>} />
+      <Route path='/dashboard' element={<Dashboard/>}/>
       
     </Routes>
   )
