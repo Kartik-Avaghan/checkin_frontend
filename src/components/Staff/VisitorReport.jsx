@@ -63,7 +63,7 @@ function VisitorReport() {
 
   const CSVgenerator = (data) => {
     const array = Array.isArray(data) ? data : [data];
-    const excludedFields = ["status", "version"];
+    const excludedFields = ["id" ,"status", "version"];
     // Filter headers
     const headers = Object.keys(array[0]).filter(
       (key) => !excludedFields.includes(key)
@@ -86,7 +86,6 @@ function VisitorReport() {
     link.download = "visitor_report.csv";
     link.click();
   };
-
 
 
   const downloadPDF = () => {
