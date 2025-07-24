@@ -1,13 +1,12 @@
 import React from 'react'
 import AdminNav from '../../components/Admin/AdminNav'
 
-function Dashboard() {
+function AdminDashboard() {
   return (
     <div>
-        
-        <AdminNav/>
+      <AdminNav/>
     </div>
   )
 }
 
-export default Dashboard
+export default AdminDashboard

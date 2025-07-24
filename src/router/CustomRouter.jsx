@@ -1,19 +1,21 @@
 import { Routes , Route } from 'react-router'
 
-import StaffLogin from '../pages/StaffLogin'
-import StaffDashboard from '../pages/StaffDashboard'
+import Login from '../pages/Login'
+import StaffDashboard from '../pages/Staff/StaffDashboard'
 import Checkin from '../pages/Checkin'
 import Report from '../pages/Report'
 import Auth from './auth/Auth'
 import NotFound from '../pages/NotFound'
-import Dashboard from '../pages/Admin/Dashboard'
+import Dashboard from '../pages/Admin/AdminDashboard'
 
 import AdminAuth from './auth/AdminAuth'
+import AdminDashboard from '../pages/Admin/AdminDashboard'
+import ManageUsers from '../pages/Admin/ManageUsers'
 
 function CustomRouter() {
   return (
     <Routes>
-      <Route path='/login' element={<StaffLogin/>}/>
+      <Route path='/login' element={<Login/>}/>
 
       <Route path='/' element={<Auth/>}>
         <Route path='/' element={<StaffDashboard/>} />
@@ -22,13 +24,13 @@ function CustomRouter() {
       </Route>
 
       <Route path='/admin' element={<AdminAuth/>}>
-        <Route path='dashboard' element={ <div> Admin </div>} />
+        <Route path='dashboard' element={ <AdminDashboard/>} />
         <Route path='checkin' element={<Checkin/>}/>
         <Route path='report' element={<Report/>}/>
+        <Route path='users' element={<ManageUsers/>} />
       </Route>
 
       <Route path='*' element={<NotFound/>} />
-      <Route path='/dashboard' element={<Dashboard/>}/>
       
     </Routes>
   )

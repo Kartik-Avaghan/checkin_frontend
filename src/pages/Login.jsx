@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useToast } from '../components/ToastProvider';
 import Loader from '../components/Loader';
-function StaffLogin() {
+function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -97,4 +97,4 @@ function StaffLogin() {
   );
 }
 
-export default StaffLogin;
+export default Login;

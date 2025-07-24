@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 
-import StaffNav from '../components/Staff/StaffNav'
-import CheckedinVisitors from '../components/Staff/CheckedinVisitors'
+import StaffNav from '../../components/Staff/StaffNav'
+import CheckedinVisitors from '../../components/Staff/CheckedinVisitors'
 
 
 function StaffDashboard() {
