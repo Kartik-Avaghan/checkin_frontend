@@ -104,7 +104,7 @@ const CheckedinVisitors = () => {
     <div className="max-w-6xl mx-auto p-4 bg-white mt-6 rounded-xl mb-16">
       <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
         <UserRoundSearch className="text-blue-600" />
-        Visitor List
+        Visitors List
       </h2>
 
       {/* Search & Filter */}

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import StaffNav from "../components/Staff/StaffNav";
+import AdminNav from "../components/Admin/AdminNav";
 import { UserPlus } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useNavigate , useLocation } from "react-router";
 import { useToast } from "../components/ToastProvider";
 import Loader from "../components/Loader";
 
@@ -17,6 +18,9 @@ function Checkin() {
 
   let navigate = useNavigate();
   const {addToast} = useToast();
+
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
 
   const handleChanges = (e) => {
     const { name, value } = e.target;
@@ -51,7 +55,8 @@ function Checkin() {
       console.log("Visitor added:", data);
       setFormData({ name: "", mobile: "", visiting: "", purpose: "" });
       console.log("Navigating...");
-      navigate("/");
+      {isAdmin ? navigate("/admin/dashboard") : navigate("/") }
+      addToast("Visitor checked in successfully!", "success");
     })
     .catch((error) => {
       console.error("Error adding visitor:", error);
@@ -63,7 +68,7 @@ function Checkin() {
 
   return (
     <div>
-      <StaffNav />
+      {isAdmin ? <AdminNav /> : <StaffNav />}
       <div>
         {isLoading &&  <Loader />}
         <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl mt-10">
