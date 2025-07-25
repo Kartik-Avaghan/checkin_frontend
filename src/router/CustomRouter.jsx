@@ -9,6 +9,7 @@ import NotFound from '../pages/NotFound'
 import Dashboard from '../pages/Admin/Dashboard'
 
 import AdminAuth from './auth/AdminAuth'
+import EditForm from '../pages/Admin/EditForm'
 
 function CustomRouter() {
   return (
@@ -29,6 +30,7 @@ function CustomRouter() {
 
       <Route path='*' element={<NotFound/>} />
       <Route path='/dashboard' element={<Dashboard/>}/>
+      <Route path='/edit' element={<EditForm/>}/>
       
     </Routes>
   )

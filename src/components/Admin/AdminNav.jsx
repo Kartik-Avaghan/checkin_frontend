@@ -22,7 +22,7 @@ function AdminNav() {
       {/* Sidebar */}
       <div className={`fixed z-99 top-0 left-0 h-full w-64 bg-sky-800 text-white shadow-lg transform transition-transform duration-300 ease-in-out ${toggle ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col p-6 space-y-4 text-lg font-medium">
-          <button onClick={() => setToggle(false)}><X className="text-white cursor-pointer" /></button>
+          <button onClick={() => setToggle(!toggle)}><X className="text-white cursor-pointer" /></button>
 
           <Link to={"/"}>
           <button className="hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">Home</button> </Link>
