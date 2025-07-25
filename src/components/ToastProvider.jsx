@@ -32,7 +32,7 @@ export default function ToastProvider({children}) {
 
       <div className='fixed top-15 right-5 z-50 space-y-2'>
         { toast.map((toast) => (
-          <div key={toast.id} className={`px-4 py-2 flex gap-2 shadow-sm rounded-md text-white font-semibold ${toast.type === "success" ? "bg-green-500" : toast.type === "error" ? "bg-red-500" : toast.type === "warning" ? "bg-yellow-500" :"bg-gray-700"}`}>
+          <div key={toast.id} className={`px-4 py-2 flex gap-2 shadow-sm rounded-md text-white font-semibold ${toast.type === "success" ? "bg-green-500" : toast.type === "error" ? "bg-red-500" : toast.type === "warning" ? "bg-amber-500" :"bg-gray-700"}`}>
            {SetIcon(toast.type)} {toast.message}
           </div>
         ))}

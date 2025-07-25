@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Download, File , Clock4 , Phone , CircleAlert , ChartGantt , Users } from "lucide-react";
+import { Download, File , Clock4 , Phone , CircleAlert , ChartGantt , Users, Calendar } from "lucide-react";
 
 import jsPDF from "jspdf";
 import { autoTable } from "jspdf-autotable";
@@ -68,16 +68,25 @@ function VisitorReport() {
     const headers = Object.keys(array[0]).filter(
       (key) => !excludedFields.includes(key)
     );
+
+    const csvHeaders =  ["S.No" , ...headers];
     const csvRows = [
-      headers.join(","), // header row
-      ...array.map((row) =>
-        headers.map((field) => `"${row[field]}"`).join(",")
-      ),
+      csvHeaders.join(","), // header row
+      ...array.map((row , index) =>
+      [
+        index+1,
+        ...headers.map((field) => `"${row[field]}"`)
+      ].join(",")),
     ];
     return csvRows.join("\n");
   };
 
   const downloadCSV = () => {
+    if (data.length === 0) {
+      addToast("No Data to Export", "warning");
+      return;
+    }
+
     const csv = CSVgenerator(data);
     const blob = new Blob([csv], { type: "text/csv" });
     // create anchor tag for download purpose
@@ -89,18 +98,30 @@ function VisitorReport() {
 
 
   const downloadPDF = () => {
+
+    if (data.length === 0) {
+      addToast("No Data to Export", "warning");
+      return;
+    }
+
     const doc = new jsPDF();
 
     doc.setFontSize(18);
+
     doc.text("Visitors Report", 14, 20);
     doc.setFontSize(12);
-    doc.text(`From: ${ new Date(startDate).toLocaleDateString("IN")}   To: ${new Date(endDate).toLocaleDateString("IN")}`, 14, 29);
-
+    if (startDate === endDate) {
+      doc.text(`Date: ${new Date(startDate).toLocaleDateString("IN")}`, 14, 29);
+    } else {
+      doc.text(`From: ${ new Date(startDate).toLocaleDateString("IN")}   To: ${new Date(endDate).toLocaleDateString("IN")}`, 14, 29);
+    }
+    
     autoTable(doc, {
       startY: 35,
       margin: { top: 10, bottom: 10, left: 10, right: 8 },
       head: [
         [
+          "S.No",
           "Name",
           "Mobile",
           "Check-in Date",
@@ -111,7 +132,8 @@ function VisitorReport() {
           "Purpose",
         ],
       ],
-      body: data.map((item) => [
+      body: data.map((item , index) => [
+        index + 1,
         item.name,
         item.mobile,
         item.checkinDate ? new Date(item.checkinDate).toLocaleDateString("in") : "-",
@@ -123,7 +145,12 @@ function VisitorReport() {
       ]),
       theme: "striped",
     });
-    doc.save(`${new Date(startDate).toLocaleDateString("in")}-${new Date(endDate).toLocaleDateString("in")} visitors_report.pdf`);
+    
+    if(startDate === endDate) {
+      doc.save(`${new Date(startDate).toLocaleDateString("in")} - visitors_report.pdf`);
+    } else{
+      doc.save(`${new Date(startDate).toLocaleDateString("in")} - ${new Date(endDate).toLocaleDateString("in")} visitors_report.pdf`);
+    }
   };
 
 
@@ -149,12 +176,12 @@ function VisitorReport() {
 
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-7xl mx-auto p-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
         <div className="flex items-center gap-2 text-blue-600">
           <Users/>
-          <h2 className="text-2xl font-bold"> Visitors Reports</h2>
+          <h2 className="text-2xl font-bold text-nowrap"> Visitors Reports</h2>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
@@ -195,9 +222,10 @@ function VisitorReport() {
             </select>
           </div> */}
         </div>
+        
         <div className="flex gap-2 flex-wrap">
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer"
             onClick={downloadCSV}
           >
             <Download size={16} />
@@ -205,14 +233,14 @@ function VisitorReport() {
           </button>
 
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer"
             onClick={downloadPDF}
           >
             <File size={16} />
             Export PDF
           </button>
-        </div>
-      </div>
+        </div> 
+      </div> 
 
       {/* Mobile View */}
       {data.length > 0 ? (
@@ -241,7 +269,10 @@ function VisitorReport() {
                 </div>
               </div>
 
-              <div className="flex gap-5 items-center">
+              <div className="text-sm mt-2 flex items-center gap-1">
+                <Calendar size={14}/> {v.checkinDate ? new Date(v.checkinDate).toLocaleDateString("IN") : "-"}
+              </div>
+              <div className="flex gap-5 items-center mb-2">
                 <div className="text-sm mt-2">
                   <strong>Check-in:</strong> {v.checkinTime ? formatTime(v.checkinTime) : "-"}
                 </div>
@@ -284,6 +315,7 @@ function VisitorReport() {
                   <th className="p-3 text-left">Mobile</th>
                   <th className="p-3 text-left">Visiting</th>
                   <th className="p-3 text-left">Purpose</th>
+                  <th className="p-3 text-left">Check-in Date</th>
                   <th className="p-3 text-left">Check-in</th>
                   <th className="p-3 text-left">Check-out</th>
                   <th className="p-3 text-left">Duration</th>
@@ -297,6 +329,7 @@ function VisitorReport() {
                     <td className="p-3">{v.mobile}</td>
                     <td className="p-3">{v.visiting}</td>
                     <td className="p-3">{v.purpose}</td>
+                    <td className="p-3"> {v.checkinDate ? new Date(v.checkinDate).toLocaleDateString("IN") : "-"} </td>
                     <td className="p-3">{v.checkinTime ? formatTime(v.checkinTime) : "-"}</td>
                     <td className="p-3">{v.checkoutTime ? formatTime(v.checkoutTime) : "-"}</td>
                     <td className="p-3">{formatMinutes(v.duration) || "-"}</td>

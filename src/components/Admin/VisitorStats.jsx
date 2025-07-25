@@ -37,7 +37,6 @@ function VisitorStats({date}) {
     })
     .then((data) => {
       setStats(data);
-      console.log(data);
     })
     .catch((error) => {
       console.log("Error in fetching Visitors", error);

@@ -58,55 +58,55 @@ function VisitorsToday({date}) {
         {/* Mobile View */}
         {data.length > 0 ? (
             <div className="lg:hidden space-y-4">
-            {data.map((v) => (
-                <div
-                key={v.id}
-                className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm"
-                >
-                <div className="flex justify-between">
-                    
-                    <div>
-                    <div className="text-lg font-semibold">{v.name}</div>
-                    <div className="text-sm text-gray-600 mt-1 flex items-center gap-1"><Phone size={12}/> {v.mobile}</div>
+                {data.map((v) => (
+                    <div
+                    key={v.id}
+                    className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm"
+                    >
+                    <div className="flex justify-between">
+                        
+                        <div>
+                        <div className="text-lg font-semibold">{v.name}</div>
+                        <div className="text-sm text-gray-600 mt-1 flex items-center gap-1"><Phone size={12}/> {v.mobile}</div>
+                        </div>
+                        <div className="mt-2 ">
+                        {v.status === true ? (
+                            <span className="bg-green-600 text-white text-sm px-3 py-1 rounded-full text-nowrap">
+                            In Office
+                            </span>
+                        ) : (
+                            <span className="bg-gray-200 text-gray-800 text-sm px-3 py-1 rounded-full text-nowrap">
+                            Checked Out
+                            </span>
+                        )}
+                        </div>
                     </div>
-                    <div className="mt-2 ">
-                    {v.status === true ? (
-                        <span className="bg-green-600 text-white text-sm px-3 py-1 rounded-full text-nowrap">
-                        In Office
-                        </span>
-                    ) : (
-                        <span className="bg-gray-200 text-gray-800 text-sm px-3 py-1 rounded-full text-nowrap">
-                        Checked Out
-                        </span>
-                    )}
-                    </div>
-                </div>
 
-                <div className="flex gap-5 items-center">
-                    <div className="text-sm mt-2">
-                    <strong>Check-in:</strong> {v.checkinTime ? formatTime(v.checkinTime) : "-"}
+                    <div className="flex gap-5 items-center mb-2">
+                        <div className="text-sm mt-2">
+                        <strong>Check-in:</strong> {v.checkinTime ? formatTime(v.checkinTime) : "-"}
+                        </div>
+                        <div className="text-sm mt-2">
+                        <strong>Check-out:</strong> {v.checkoutTime ? formatTime(v.checkoutTime) : "-"}
+                        </div>
                     </div>
-                    <div className="text-sm mt-2">
-                    <strong>Check-out:</strong> {v.checkoutTime ? formatTime(v.checkoutTime) : "-"}
-                    </div>
-                </div>
 
-                { v.checkoutTime && 
-                <div className="text-sm mt-1 flex items-center gap-1">
-                    <Clock4 size={16} /> Duration: {v.checkoutTime ? formatMinutes(v.duration) : "-" }
-                </div> }
+                    { v.checkoutTime && 
+                    <div className="text-sm mt-1 flex items-center gap-1">
+                        <Clock4 size={16} /> Duration: {v.checkoutTime ? formatMinutes(v.duration) : "-" }
+                    </div> }
 
-                <div className="flex mt-2 text-sm text-gray-700 gap-4 sm:gap-5 flex-wrap">
-                    <div>
-                    <strong>Visiting:</strong> {v.visiting}
+                    <div className="flex mt-2 text-sm text-gray-700 gap-4 sm:gap-5 flex-wrap">
+                        <div>
+                        <strong>Visiting:</strong> {v.visiting}
+                        </div>
+                        <div className="">
+                        <strong>Purpose:</strong> {v.purpose}
+                        </div>
                     </div>
-                    <div className="">
-                    <strong>Purpose:</strong> {v.purpose}
-                    </div>
-                </div>
 
                 </div>
-            ))}
+                ))}
             </div>
         ) : (
             <div className="lg:hidden flex items-center justify-center gap-2 mt-40 text-xl text-gray-800 font-medium">
