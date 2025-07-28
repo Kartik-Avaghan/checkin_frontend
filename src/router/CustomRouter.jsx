@@ -34,7 +34,7 @@ function CustomRouter() {
         <Route path='checkin' element={<Checkin/>}/>
         <Route path='report' element={<Report/>}/>
         <Route path='users' element={<ManageUsers/>} />
-        <Route path='/add' element={<AddForm/>} />
+        <Route path='add' element={<AddForm/>} />
       </Route>
 
       <Route path='*' element={<NotFound/>} />
