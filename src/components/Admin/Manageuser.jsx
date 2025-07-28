@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { SquarePen, Trash2, Search } from "lucide-react";
+import { useNavigate } from "react-router";
 
 function Manageuser() {
   const [staff, setStaff] = useState([]);
-  const [update, setUpdate] = useState([]);
+  // const [update, setUpdate] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
+
+  const navigate=useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:8080/users/`, {
@@ -29,17 +32,22 @@ function Manageuser() {
   }, []);
 
 
-  const handleUpdate = (e) => {
+
+const handleUpdate = (e) => {
   e.preventDefault();
 
-  fetch(`http://localhost:8080/users/update/${id}`, {
-    method: "POST", // because your backend uses @PostMapping
+  fetch(`http://localhost:8080/users/update/${editingUser.id}`, {
+    method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `${localStorage.getItem("token")}`,
     },
-    body: JSON.stringify(editingUser),
+    body: JSON.stringify({
+      username: editingUser.username,
+      mobile: editingUser.mobile,
+      role: editingUser.role,
+    }),
   })
     .then((response) => {
       if (!response.ok) {
@@ -51,44 +59,20 @@ function Manageuser() {
       setStaff((prevData) =>
         prevData.map((s) => (s.id === updatedUser.id ? updatedUser : s))
       );
-      setEditingUser(null); // exit edit mode
+      setEditingUser(null);
+      navigate("/admin/users");
     })
     .catch((error) => {
       console.log("Error updating user:", error);
-    })
-    .finally(() => {
-      setUpdate(editingUser.id);
     });
 };
 
 
-  // const handleUpdate=(id)=>{
-  //   fetch('http://localhost:8080/users/update/${id}',{
-  //     method:"POST",
-  //     credentials:'include',
-  //     headers:{
-  //       'Content-Type':'application/json',
-  //       Authorization:`${localStorage.getItem("token")}`
-  //     }
-  //     })
-  //     .then((response)=>{
-  //       if(!response.ok){
-  //         throw new Error("Response was not ok")
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((updateStaff)=>
-  //       setStaff((preData)=>{
-  //         preData.map((s)=>(s.id===updateStaff.id ? updateStaff: s)) 
-  //       })
-      
-  //     )
-  //     .catch((error)=>{console.log("Error in fetching",error);})
-  //     .finally(()=>{setUpdate(id);});
-    
 
-      
-  //   };
+
+
+
+
 
     const handleDelete = (id) => {
   fetch(`http://localhost:8080/users/delete/${id}`, {
@@ -114,8 +98,6 @@ function Manageuser() {
     });
 };
 
-
-  
 
   const handleEdit = (user) => {
     setEditingUser(user);
@@ -235,75 +217,72 @@ function Manageuser() {
 
           {/* Form */}
           <form className="flex flex-col gap-4" onSubmit={handleUpdate}>
-            <div className="flex flex-col">
-              <label htmlFor="name" className="mb-1 text-gray-700 font-medium">
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                value={editingUser.name}
-                onChange={(e) =>
-                  setEditingUser({ ...editingUser, name: e.target.value })
-                }
-                placeholder="Enter full name"
-                className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
+  <div className="flex flex-col">
+    <label htmlFor="username" className="mb-1 text-gray-700 font-medium">
+      Full Name
+    </label>
+    <input
+      type="text"
+      id="username"
+      value={editingUser.username}
+      onChange={(e) =>
+        setEditingUser({ ...editingUser, username: e.target.value })
+      }
+      placeholder="Enter full name"
+      className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+  </div>
 
-            <div className="flex flex-col">
-              <label
-                htmlFor="mobile"
-                className="mb-1 text-gray-700 font-medium"
-              >
-                Mobile Number
-              </label>
-              <input
-                type="tel"
-                id="mobile"
-                value={editingUser.mobile}
-                onChange={(e) =>
-                  setEditingUser({ ...editingUser, mobile: e.target.value })
-                }
-                placeholder="Enter mobile number"
-                className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
+  <div className="flex flex-col">
+    <label htmlFor="mobile" className="mb-1 text-gray-700 font-medium">
+      Mobile Number
+    </label>
+    <input
+      type="tel"
+      id="mobile"
+      value={editingUser.mobile}
+      onChange={(e) =>
+        setEditingUser({ ...editingUser, mobile: e.target.value })
+      }
+      placeholder="Enter mobile number"
+      className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+  </div>
 
-            <div className="flex flex-col">
-              <label htmlFor="role" className="mb-1 text-gray-700 font-medium">
-                Role
-              </label>
-              <select
-                id="role"
-                value={editingUser.role}
-                onChange={(e) =>
-                  setEditingUser({ ...editingUser, role: e.target.value })
-                }
-                className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                <option value="">Select Role</option>
-                <option value="Admin">Admin</option>
-                <option value="Staff">Staff</option>
-              </select>
-            </div>
+  <div className="flex flex-col">
+    <label htmlFor="role" className="mb-1 text-gray-700 font-medium">
+      Role
+    </label>
+    <select
+      id="role"
+      value={editingUser.role}
+      onChange={(e) =>
+        setEditingUser({ ...editingUser, role: e.target.value })
+      }
+      className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    >
+      <option value="">Select Role</option>
+      <option value="Admin">Admin</option>
+      <option value="Staff">Staff</option>
+    </select>
+  </div>
 
-            <div className="flex justify-end gap-4 mt-6">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="border border-gray-400 text-gray-700 rounded-lg px-4 py-2 hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="bg-sky-800  border-2 border-sky-800 text-white rounded-lg px-4 py-2 hover:bg-white hover:text-sky-800 "
-              >
-                Update User
-              </button>
-            </div>
-          </form>
+  <div className="flex justify-end gap-4 mt-6">
+    <button
+      type="button"
+      onClick={handleCancel}
+      className="border border-gray-400 text-gray-700 rounded-lg px-4 py-2 hover:bg-gray-100"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      className="bg-sky-800 border-2 border-sky-800 text-white rounded-lg px-4 py-2 hover:bg-white hover:text-sky-800"
+    >
+      Update User
+    </button>
+  </div>
+</form>
         </div>
       )}
     </div>
