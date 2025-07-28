@@ -6,7 +6,7 @@ function ManageUsers() {
   return (
     <div>
         <AdminNav/>
-        ManageUsers
+        <Manageuser/>
     </div>
   )
 }

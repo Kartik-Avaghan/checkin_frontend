@@ -11,6 +11,7 @@ import Dashboard from '../pages/Admin/AdminDashboard'
 import AdminAuth from './auth/AdminAuth'
 import AdminDashboard from '../pages/Admin/AdminDashboard'
 import ManageUsers from '../pages/Admin/ManageUsers'
+import AddForm from '../pages/Admin/AddForm'
 
 function CustomRouter() {
   return (
@@ -28,9 +29,12 @@ function CustomRouter() {
         <Route path='checkin' element={<Checkin/>}/>
         <Route path='report' element={<Report/>}/>
         <Route path='users' element={<ManageUsers/>} />
+        <Route path='/add' element={<AddForm/>} />
       </Route>
 
       <Route path='*' element={<NotFound/>} />
+
+      
       
     </Routes>
   )

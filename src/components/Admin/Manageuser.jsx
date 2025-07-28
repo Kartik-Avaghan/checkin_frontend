@@ -4,17 +4,17 @@ import { SquarePen, Trash2, Search } from "lucide-react";
 
 function Manageuser() {
   const [staff, setStaff] = useState([]);
-  const [updateStaff, setUpdateStaff] = useState([]);
+  const [update, setUpdate] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
 
   useEffect(() => {
-    fetch(`https://localhost:8080/users/`, {
+    fetch(`http://localhost:8080/users/`, {
       method: "GET",
       credentials:'include',
       headers: {
         "Content-Type": "application/json",
          Authorization: `${localStorage.getItem("token")}`,
-      },
+      }
     })
       .then((response) => {
         if (!response.ok) {
@@ -28,13 +28,32 @@ function Manageuser() {
       });
   }, []);
 
-  // const handleupdate=(id)=>{
-  //   fetch('{$id}'),{
-  //     mathod:"POST",
-      
+  const handleUpdate=(id)=>{
+    fetch('http://localhost:8080/users/update/${id}',{
+      mathod:"POST",
+      credentials:'include',
+      headers:{
+        'Content-Type':'application/json',
+        Authorization:`${localStorage.getItem("token")}`
+      }
+      })
+      .then((response)=>{
+        if(!response.ok){
+          throw new Error("Response was not ok")
+        }
+        return response.json();
+      })
+      .then((updateStaff)=>{
+        setStaff((preData)=>{
+          preData.map((s)=>(s.id===updateStaff.id ? updateStaff: s)) 
+        });
+      })
+      .catch((error)=>{console.log("Error in fetching",error);})
+      .finally(()=>{setUpdate(id);});
+    
 
-  //     }
-  //   }
+      
+    };
 
   const handleEdit = (user) => {
     setEditingUser(user);
@@ -44,11 +63,11 @@ function Manageuser() {
     setEditingUser(null);
   };
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    // Update logic here (API call or state update)
-    setEditingUser(null);
-  };
+  // const handleUpdate = (e) => {
+  //   e.preventDefault();
+  //   // Update logic here (API call or state update)
+  //   setEditingUser(null);
+  // };
 
   return (
     <div className="max-w-5xl mx-auto p-4">
@@ -85,7 +104,9 @@ function Manageuser() {
                 </div>
 
                 <select className="border p-2 rounded-xl m-1">
-                  <option value="All Roles">All Roles</option>
+                  <option  value="All Roles">All Roles</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Staff">Staff</option>
                 </select>
               </div>
             </div>
@@ -120,7 +141,7 @@ function Manageuser() {
                 <tbody>
                   {staff.map((s) => (
                     <tr key={s.id} className="border-t border-gray-300">
-                      <td className="px-6 py-3">{s.name}</td>
+                      <td className="px-6 py-3">{s.username}</td>
                       <td className="px-6 py-3">{s.mobile}</td>
                       <td className="px-6 py-3">{s.role}</td>
                       <td className="px-6 py-3">
@@ -128,7 +149,7 @@ function Manageuser() {
                           className="hover:border-sky-800 hover:text-white hover:bg-sky-800 border-2 border-sky-800 p-2 rounded-lg mr-2"
                           onClick={() => handleEdit(s)}
                         >
-                          <SquarePen className="w-4 h-4" />
+                          <SquarePen className="w-4 h-4" on />
                         </button>
                         <button className="hover:border-sky-800 hover:text-white hover:bg-sky-800 border-2 border-sky-800 p-2 rounded-lg">
                           <Trash2 className="w-4 h-4" />
@@ -231,90 +252,3 @@ function Manageuser() {
 
 export default Manageuser;
 
-// import React, { useState } from 'react'
-// import { Link } from 'react-router'
-// import { SquarePen } from 'lucide-react';
-// import { Trash2 } from 'lucide-react';
-// import { Search } from 'lucide-react';
-
-// function Manageuser() {
-
-// const[editingUser,setEditingUser]=useState(null);
-
-// const handleEdit=(user)=>{
-//   setEditingUser(user);
-// }
-
-//   return (
-//    <div className='max-w-5xl mx-auto p-4'>
-//   {/* Header */}
-//   <div className="flex justify-between items-center mb-6">
-//     <div className="flex flex-col">
-//       <h2 className="text-2xl font-bold">User Management</h2>
-//       <h3 className="text-sm text-gray-600">Manage staff and admin users</h3>
-//     </div>
-//     <Link to={"/checkin"}>
-//     <button className="border-2 border-sky-800 bg-sky-800 text-white font-semibold rounded-xl px-4 py-2 hover:bg-white hover:text-sky-800 transition">
-//       Add Users
-//     </button>
-//     </Link>
-//   </div>
-
-// {/* filter */}
-//   <div className='flex justify-center items-center'>
-//   <div className=" p-4 rounded-lg shadow-sm w-full">
-//     <h2 className="text-lg font-semibold mb-3">Filters</h2>
-
-//     <div className="flex justify-between items-center gap-3">
-//       <div className="relative w-80">
-//         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-//         <input
-//           type="search"
-//           placeholder="Search by name or mobile"
-//           className="border rounded-lg pl-10 pr-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-//         />
-//       </div>
-
-//       <select className="border p-2 rounded-xl m-1">
-//         <option value="All Roles">All Roles</option>
-//       </select>
-//     </div>
-//   </div>
-// </div>
-
-//   <div className="bg-gray-50 rounded-lg shadow-sm p-4 mt-4">
-//   <h1 className="text-2xl font-bold mb-1">Users</h1>
-//   <h3 className="text-gray-600 mb-4">Message your organization's staff and admin users</h3>
-
-//   <div className="overflow-x-auto">
-//     <table className="min-w-full table-auto border-collapse">
-//       <thead className="bg-gray-100">
-//         <tr>
-//           <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-//           <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Mobile</th>
-//           <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Role</th>
-//           <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//         <tr className="border-t">
-//           <td className="px-6 py-3">John Doe</td>
-//           <td className='px-6 py-3'>5879642215</td>
-//           <td className="px-6 py-3">Admin</td>
-//           <td className="px-6 py-3 ">
-//             <button className=" hover:border-sky-800 hover:text-white hover:bg-sky-800 border-2  border-sky-800 p-2 rounded-lg mr-2" onClick={() => handleEdit({ name: "John Doe", mobile: "5879642215", role: "Admin" })}><SquarePen className='w-4 h-4 '  /></button>
-//             <button className=" hover:border-sky-800 hover:text-white hover:bg-sky-800 border-2  border-sky-800 p-2 rounded-lg"> <Trash2  className='w-4 h-4 '/></button>
-//           </td>
-//         </tr>
-
-//       </tbody>
-//     </table>
-//   </div>
-// </div>
-
-// </div>
-
-//   )
-// }
-
-// export default Manageuser
