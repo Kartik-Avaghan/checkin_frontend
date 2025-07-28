@@ -28,32 +28,94 @@ function Manageuser() {
       });
   }, []);
 
-  const handleUpdate=(id)=>{
-    fetch('http://localhost:8080/users/update/${id}',{
-      mathod:"POST",
-      credentials:'include',
-      headers:{
-        'Content-Type':'application/json',
-        Authorization:`${localStorage.getItem("token")}`
+
+  const handleUpdate = (e) => {
+  e.preventDefault();
+
+  fetch(`http://localhost:8080/users/update/${id}`, {
+    method: "POST", // because your backend uses @PostMapping
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify(editingUser),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Response was not ok");
       }
-      })
-      .then((response)=>{
-        if(!response.ok){
-          throw new Error("Response was not ok")
-        }
-        return response.json();
-      })
-      .then((updateStaff)=>{
-        setStaff((preData)=>{
-          preData.map((s)=>(s.id===updateStaff.id ? updateStaff: s)) 
-        });
-      })
-      .catch((error)=>{console.log("Error in fetching",error);})
-      .finally(()=>{setUpdate(id);});
+      return response.json();
+    })
+    .then((updatedUser) => {
+      setStaff((prevData) =>
+        prevData.map((s) => (s.id === updatedUser.id ? updatedUser : s))
+      );
+      setEditingUser(null); // exit edit mode
+    })
+    .catch((error) => {
+      console.log("Error updating user:", error);
+    })
+    .finally(() => {
+      setUpdate(editingUser.id);
+    });
+};
+
+
+  // const handleUpdate=(id)=>{
+  //   fetch('http://localhost:8080/users/update/${id}',{
+  //     method:"POST",
+  //     credentials:'include',
+  //     headers:{
+  //       'Content-Type':'application/json',
+  //       Authorization:`${localStorage.getItem("token")}`
+  //     }
+  //     })
+  //     .then((response)=>{
+  //       if(!response.ok){
+  //         throw new Error("Response was not ok")
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((updateStaff)=>
+  //       setStaff((preData)=>{
+  //         preData.map((s)=>(s.id===updateStaff.id ? updateStaff: s)) 
+  //       })
+      
+  //     )
+  //     .catch((error)=>{console.log("Error in fetching",error);})
+  //     .finally(()=>{setUpdate(id);});
     
 
       
-    };
+  //   };
+
+    const handleDelete = (id) => {
+  fetch(`http://localhost:8080/users/delete/${id}`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${localStorage.getItem("token")}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Response was not ok");
+      }
+      return response.text();
+    })
+    .then((message) => {
+      alert(message);
+      setStaff((prevData) => prevData.filter((s) => s.id !== id));
+    })
+    .catch((error) => {
+      console.log("Error in deleting user:", error);
+    });
+};
+
+
+  
 
   const handleEdit = (user) => {
     setEditingUser(user);
@@ -63,11 +125,7 @@ function Manageuser() {
     setEditingUser(null);
   };
 
-  // const handleUpdate = (e) => {
-  //   e.preventDefault();
-  //   // Update logic here (API call or state update)
-  //   setEditingUser(null);
-  // };
+  
 
   return (
     <div className="max-w-5xl mx-auto p-4">
@@ -81,7 +139,7 @@ function Manageuser() {
                 Manage staff and admin users
               </h3>
             </div>
-            <Link to="/checkin">
+            <Link to={"/admin/add"}>
               <button className="border-2 border-sky-800 bg-sky-800 text-white font-semibold rounded-xl px-4 py-2 hover:bg-white hover:text-sky-800 transition">
                 Add Users
               </button>
@@ -145,13 +203,15 @@ function Manageuser() {
                       <td className="px-6 py-3">{s.mobile}</td>
                       <td className="px-6 py-3">{s.role}</td>
                       <td className="px-6 py-3">
+                        {/* edit button */}
                         <button
                           className="hover:border-sky-800 hover:text-white hover:bg-sky-800 border-2 border-sky-800 p-2 rounded-lg mr-2"
                           onClick={() => handleEdit(s)}
                         >
                           <SquarePen className="w-4 h-4" on />
                         </button>
-                        <button className="hover:border-sky-800 hover:text-white hover:bg-sky-800 border-2 border-sky-800 p-2 rounded-lg">
+                        {/* delete button */}
+                        <button onClick={() => handleDelete(s.id)} className="hover:border-sky-800 hover:text-white hover:bg-sky-800 border-2 border-sky-800 p-2 rounded-lg " >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </td>
