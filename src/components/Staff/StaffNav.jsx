@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, LogOut, X , Home , FileText} from 'lucide-react';
+import { Menu, LogOut, X , Home , FileText, Power} from 'lucide-react';
 import { Link , useNavigate } from 'react-router';
 
 function StaffNav() {
@@ -14,8 +14,9 @@ function StaffNav() {
   return (
     <div className="relative">
   
-      <div className="z-50 p-4 bg-sky-700  cursor-pointer">
+      <div className="z-50 p-4 bg-sky-700  cursor-pointer flex justify-between">
         <Menu className="text-white" onClick={() => setToggle(!toggle)}/>
+        <Power className="text-white" onClick={() => handlelogout()}/>
       </div>
 
       {/* Sidebar */}
