@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { useToast } from "../ToastProvider";
+import Loader from "../Loader";
 
 function AddUsers() {
   const [users, setUsers] = useState({
-    name: "",
+    username: "",
     mobile: "",
-    role: "admin" // set default role
+    password:"",
+    role: "admin", 
   });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const { addToast } = useToast();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -14,33 +22,40 @@ function AddUsers() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch('http://localhost:8080/users/add', {
+    setIsLoading(true);
+
+    fetch("http://localhost:8080/users/add", {
       method: "POST",
-      credentials:'include',
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({...users}),
     })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("User added successfully:", data);
-      // reset form
-      setUsers({ name: "", mobile: "", role: "admin" });
-    })
-    .catch((error) => {
-      console.log("Error in posting user:", error);
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setUsers({ username: "", mobile: "",password:"", role: "admin" });
+        addToast("User added successfully!", "success");
+        navigate("/admin/users");
+      })
+      .catch((error) => {
+        console.error("Error in posting user:", error);
+        addToast("Could not add user. Please try again.", "error");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      {isLoading && <Loader />}
       <div className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-4">Add Users</h1>
 
@@ -48,18 +63,29 @@ function AddUsers() {
           <input
             type="text"
             placeholder="Staff full name"
-            name="name"
-            defaultValue={users.name}
+            name="username"
+            value={users.username}
             onChange={handleChange}
             required
             className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
           <input
-            type="text"
+            type="tel"
             placeholder="Mobile Number"
             name="mobile"
-            defaultValue={users.mobile}
+            value={users.mobile}
+            onChange={handleChange}
+            required
+            pattern="[0-9]{10}"
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+
+          <input
+            type="password"
+            placeholder="password"
+            name="password"
+            value={users.password}
             onChange={handleChange}
             required
             className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -67,7 +93,7 @@ function AddUsers() {
 
           <select
             name="role"
-            defaultValue={users.role}
+            value={users.role}
             onChange={handleChange}
             className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
