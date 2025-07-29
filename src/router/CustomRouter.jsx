@@ -39,8 +39,6 @@ function CustomRouter() {
 
       <Route path='*' element={<NotFound/>} />
 
-      
-      
     </Routes>
   )
 }

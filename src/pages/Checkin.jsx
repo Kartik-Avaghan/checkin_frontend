@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StaffNav from "../components/Staff/StaffNav";
 import AdminNav from "../components/Admin/AdminNav";
 import { UserPlus } from "lucide-react";
 import { useNavigate , useLocation } from "react-router";
+import { jwtDecode } from "jwt-decode";
 import { useToast } from "../components/ToastProvider";
 import Loader from "../components/Loader";
+
 
 function Checkin() {
 
@@ -13,6 +15,7 @@ function Checkin() {
     mobile: "",
     visiting: "",
     purpose: "",
+    checkedInBy:""
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,6 +32,17 @@ function Checkin() {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if(token){
+      let tokendata = jwtDecode(token)
+      setFormData({checkedInBy: tokendata.sub})
+    } else{
+      localStorage.removeItem("token");
+      navigate("/login")
+    }
+  },[])
 
   function handleCheckin(e) {
     e.preventDefault();
@@ -54,7 +68,6 @@ function Checkin() {
     .then((data) => {
       console.log("Visitor added:", data);
       setFormData({ name: "", mobile: "", visiting: "", purpose: "" });
-      console.log("Navigating...");
       {isAdmin ? navigate("/admin/dashboard") : navigate("/") }
       addToast("Visitor checked in successfully!", "success");
     })

@@ -130,6 +130,7 @@ function VisitorReport() {
           "Duration",
           "Visiting Person",
           "Purpose",
+          "Staff Incharge",
         ],
       ],
       body: data.map((item , index) => [
@@ -142,6 +143,7 @@ function VisitorReport() {
         formatMinutes(item.duration),
         item.visiting,
         item.purpose,
+        item.checkedInBy
       ]),
       theme: "striped",
     });
