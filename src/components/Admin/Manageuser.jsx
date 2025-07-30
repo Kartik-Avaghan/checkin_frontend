@@ -44,22 +44,22 @@ function Manageuser() {
         role: editingUser.role,
       }),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Response was not ok");
-        }
-        return response.json();
-      })
-      .then((updatedUser) => {
-        setStaff((prevData) =>
-          prevData.map((s) => (s.id === updatedUser.id ? updatedUser : s))
-        );
-        setEditingUser(null);
-        navigate("/admin/users");
-      })
-      .catch((error) => {
-        console.log("Error updating user:", error);
-      });
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Response was not ok");
+      }
+      return response.json();
+    })
+    .then((updatedUser) => {
+      setStaff((prevData) =>
+        prevData.map((s) => (s.id === updatedUser.id ? updatedUser : s))
+      );
+      setEditingUser(null);
+      navigate("/admin/users");
+    })
+    .catch((error) => {
+      console.log("Error updating user:", error);
+    });
   };
 
   const handleDelete = (id) => {

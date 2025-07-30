@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { data, useNavigate } from 'react-router';
 import { useToast } from '../components/ToastProvider';
 import Loader from '../components/Loader';
 function Login() {
@@ -28,13 +28,27 @@ function Login() {
     })
     .then((token) => {
       localStorage.setItem("token", token); 
-      navigate("/");
+      updatestatus(username);
     })
     .catch((err) => {
       addToast("Invalid username or password", "error");
     })
     .finally(() => { setIsLoading(false); });
   };
+
+  function updatestatus(username){
+    fetch(`http://localhost:8080/users/update/login/${username}`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => res.json)
+    .then((data) => {console.log(data); navigate("/");})
+    .catch((err) => console.log(err))
+  }
 
   if(isLoading){
     return <Loader />;

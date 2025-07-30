@@ -8,7 +8,7 @@ function AddUsers() {
     username: "",
     mobile: "",
     password:"",
-    role: "admin", 
+    role: "staff",
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +40,7 @@ function AddUsers() {
         return response.json();
       })
       .then((data) => {
-        setUsers({ username: "", mobile: "",password:"", role: "admin" });
+        setUsers({ username: "", mobile: "",password:"", role: "" });
         addToast("User added successfully!", "success");
         navigate("/admin/users");
       })

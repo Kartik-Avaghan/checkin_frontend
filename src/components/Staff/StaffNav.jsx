@@ -1,14 +1,41 @@
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import { Menu, LogOut, X , Home , FileText, Power} from 'lucide-react';
 import { Link , useNavigate } from 'react-router';
+import { jwtDecode } from "jwt-decode";
 
 function StaffNav() {
   const [toggle, setToggle] = useState(false);
-  const navigate = useNavigate()
+  const [username , setusername] = useState();
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if(token){
+      let tokendata = jwtDecode(token)
+      setusername(tokendata.sub)
+    } else{
+      localStorage.removeItem("token");
+      navigate("/login")
+    }
+  },[])
 
   function handlelogout(){
-    localStorage.removeItem("token");
-    navigate('/login')
+
+    fetch(`http://localhost:8080/users/update/logout/${username}`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => res.json)
+    .then((data) => {
+      localStorage.removeItem("token");
+      navigate('/login')
+    })
+    .catch((err) => console.log(err))
   }
 
   return (
