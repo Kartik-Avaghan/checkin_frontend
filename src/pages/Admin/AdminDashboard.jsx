@@ -1,7 +1,7 @@
 import { useEffect , useState} from 'react'
 import AdminNav from '../../components/Admin/AdminNav'
 import VisitorsToday from '../../components/Admin/VisitorsToday'
-import VisitorStats from '../../components/Admin/VisitorStats'
+import Stats from '../../components/Admin/Stats'
 import {useToast} from '../../components/ToastProvider'
 
 function AdminDashboard() {
@@ -24,7 +24,7 @@ function AdminDashboard() {
           <label htmlFor="date" className='text-gray-600 font-semibold p-2'>Select Date:</label>
           <input type="date" name="date" id="date" className='border rounded py-2 px-4 border-gray-300 mb-4' value={date}  onChange={(e) => setDate(e.target.value) }/>
         </div>
-        <VisitorStats date={date}/>
+        <Stats date={date}/>
         <div className='w-full my-10 p-3 md:my-4 md:p-14'>
           <VisitorsToday date={date}/>
         </div>

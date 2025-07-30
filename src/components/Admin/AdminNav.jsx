@@ -8,8 +8,20 @@ function AdminNav() {
   const navigate = useNavigate();
 
   function handlelogout() {
-    localStorage.removeItem("token");
-    navigate("/login");
+    fetch(`http://localhost:8080/users/update/logout/${username}`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => res.json)
+    .then((data) => {
+      localStorage.removeItem("token");
+      navigate('/login')
+    })
+    .catch((err) => console.log(err))
   }
 
   return (
