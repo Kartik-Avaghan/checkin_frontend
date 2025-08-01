@@ -1,11 +1,23 @@
-import React from "react";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import { Menu, LogOut, X, Home, FileText, Plus, Users , Power } from "lucide-react";
 import { Link, useNavigate } from "react-router";
+import { jwtDecode } from "jwt-decode";
 
 function AdminNav() {
   const [toggle, setToggle] = useState(false);
   const navigate = useNavigate();
+  const [username , setusername] = useState();
+
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if(token){
+      let tokendata = jwtDecode(token)
+      setusername(tokendata.sub)
+    } else{
+      localStorage.removeItem("token");
+      navigate("/login")
+    }
+  },[])
 
   function handlelogout() {
     fetch(`http://localhost:8080/users/update/logout/${username}`, {
