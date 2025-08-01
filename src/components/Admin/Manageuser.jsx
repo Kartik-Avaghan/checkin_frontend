@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { SquarePen, Trash2, Search , UserPlus } from "lucide-react";
 import EditUser from "./EditUser";
+import DeleteUser from "./DeleteUser";
+import AddUsers from "./AddUsers";
 
 function Manageuser() {
   const [data, setData] = useState([]);
   const [staffid , setStaffId] = useState();
+  const [deleteUser , setDelete] = useState(false);
+  const [addUser , setAddUser] = useState(false);
   const [edit , setEdit] = useState(false);
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:8080/users/`, {
@@ -29,38 +32,19 @@ function Manageuser() {
     .catch((error) => {
       console.log("Fetching Error", error);
     });
-  }, [edit]);
+  }, [edit, deleteUser]);
 
   
 
-  const handleDelete = (id) => {
-    fetch(`http://localhost:8080/users/delete/${id}`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${localStorage.getItem("token")}`,
-      },
-    })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Response was not ok");
-      }
-      return response.text();
-    })
-    .then((message) => {
-      alert(message);
-    })
-    .catch((error) => {
-      console.log("Error in deleting user:", error);
-    });
-  };
-
   function handleEdit(staffid){
-    setStaffId(staffid)
+    setStaffId(staffid);
     setEdit(true);
   }
 
+  function handleDelete(staffid){
+    setStaffId(staffid);
+    setDelete(true)
+  }
 
 
   return (
@@ -72,11 +56,11 @@ function Manageuser() {
             Manage staff and admin users
           </h3>
         </div>
-        <Link to={"/admin/add"}>
-          <button className="border-2 border-sky-800 bg-sky-800 text-white font-semibold rounded-xl px-4 py-2 hover:bg-white hover:text-sky-800 transition flex items-center gap-2 cursor-pointer">
-            <UserPlus size={18}/> Add Users
-          </button>
-        </Link>
+      
+        <button className="border-2 border-sky-800 bg-sky-800 text-white text-lg font-semibold rounded-xl px-4 py-2 hover:bg-white hover:text-sky-800 transition flex items-center gap-2 cursor-pointer"   onClick={() => setAddUser(true)}>
+          <UserPlus size={20}/> Add Users
+        </button>
+   
       </div>
 
       <div className="rounded-lg p-4 mt-4">
@@ -135,7 +119,9 @@ function Manageuser() {
         </div>
       </div>
       
+      {addUser && <AddUsers/> }
       { edit && <EditUser staffid={staffid} setEdit={setEdit}/>}
+      {deleteUser && <DeleteUser id={staffid} setDelete={setDelete}/>}
     </div>
   );
 }

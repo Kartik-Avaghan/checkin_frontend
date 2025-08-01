@@ -1,4 +1,5 @@
 import { useState , useEffect } from 'react';
+import {useToast} from '../../components/ToastProvider'
 
 function EditUser({staffid , setEdit}) {
 
@@ -7,6 +8,8 @@ function EditUser({staffid , setEdit}) {
     mobile: "",
     role: "",
   });
+
+  const {addToast} = useToast();
 
   useEffect(() => {
     if (!staffid) {
@@ -53,6 +56,7 @@ function EditUser({staffid , setEdit}) {
     return response.json();
     })
     .then((data) => {
+      addToast("User Details updated" , "success")
       setEdit(false)
     })
     .catch((error) => {
@@ -143,7 +147,7 @@ function EditUser({staffid , setEdit}) {
         </form>
       </div>
     </div>
-    <div className='w-[100vw] h-[100vh]  bg-black/80 absolute top-0 z-1' onClick={() => setEdit(false)}></div>
+    <div className='w-[100vw] h-[100vh] bg-black/80 absolute top-0 z-1' onClick={() => setEdit(false)}></div>
     </div>
   )
 }

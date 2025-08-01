@@ -6,10 +6,8 @@ import Checkin from '../pages/Checkin'
 import CheckedInVisitors from '../pages/Staff/CheckedInVisitors'
 import Report from '../pages/Report'
 
-
 import Auth from './auth/Auth'
 import NotFound from '../pages/NotFound'
-import Dashboard from '../pages/Admin/AdminDashboard'
 
 import AdminAuth from './auth/AdminAuth'
 import AdminDashboard from '../pages/Admin/AdminDashboard'

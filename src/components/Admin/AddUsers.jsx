@@ -42,7 +42,6 @@ function AddUsers() {
       .then((data) => {
         setUsers({ username: "", mobile: "",password:"", role: "" });
         addToast("User added successfully!", "success");
-        navigate("/admin/users");
       })
       .catch((error) => {
         console.error("Error in posting user:", error);
