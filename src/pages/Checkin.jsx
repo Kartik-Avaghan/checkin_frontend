@@ -17,6 +17,7 @@ function Checkin() {
     purpose: "",
     checkedInBy:""
   });
+  
   const [isLoading, setIsLoading] = useState(false);
 
   let navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Menu, LogOut, X, Home, FileText, Plus, Users } from "lucide-react";
+import { Menu, LogOut, X, Home, FileText, Plus, Users , Power } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 
 function AdminNav() {
@@ -26,8 +26,9 @@ function AdminNav() {
 
   return (
     <div className="relative">
-      <div className="z-50 p-4 bg-sky-700">
+      <div className="z-50 p-4 bg-sky-700 flex justify-between">
         <Menu className="text-white hover:cursor-pointer" onClick={() => setToggle(!toggle)} />
+        <Power className="text-white cursor-pointer" onClick={() => handlelogout()}/>
       </div>
 
       {/* Sidebar */}
