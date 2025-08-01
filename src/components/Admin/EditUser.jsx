@@ -33,7 +33,6 @@ function EditUser({id , setEdit}) {
         mobile: data.mobile,
         role: data.role
       }); 
-      addToast("User Details Updated SuccessFully" , "success")
     })
     .catch((err) => {
       console.error(err);
@@ -62,7 +61,7 @@ function EditUser({id , setEdit}) {
     return response.json();
     })
     .then((data) => {
-      addToast("User Details updated" , "success")
+      addToast("User Details updated SuccessFully" , "success")
       setEdit(false)
     })
     .catch((error) => {
@@ -82,7 +81,7 @@ function EditUser({id , setEdit}) {
   return (
     <div className='fixed z-50 top-0 left-0 w-full h-full'>
       <div className='flex justify-center items-center h-screen'>
-        <div className="m-8 sm:m-2 p-6 w-75 md:w-100 lg:w-125 bg-white rounded-lg shadow mt-8 relative z-50">
+        <div className="m-2 sm:m-2 p-6 w-75 md:w-100 lg:w-125 bg-white rounded-lg shadow mt-8 relative z-50">
           <div className="flex flex-col items-center mb-6">
             <h2 className="text-2xl font-bold">Edit User</h2>
             <h3 className="text-xl text-gray-600">Update the user information</h3>
