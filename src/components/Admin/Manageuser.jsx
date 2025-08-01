@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
-import { SquarePen, Trash2, Search , UserPlus } from "lucide-react";
+import { SquarePen, Trash2, UserPlus } from "lucide-react";
 import EditUser from "./EditUser";
 import DeleteUser from "./DeleteUser";
 import AddUsers from "./AddUsers";
 
 function Manageuser() {
   const [data, setData] = useState([]);
-  const [staffid , setStaffId] = useState();
+  const [userId , setUserId] = useState();
   const [deleteUser , setDelete] = useState(false);
   const [addUser , setAddUser] = useState(false);
   const [edit , setEdit] = useState(false);
@@ -35,14 +34,13 @@ function Manageuser() {
   }, [edit, deleteUser, addUser]);
 
   
-
-  function handleEdit(staffid){
-    setStaffId(staffid);
+  function handleEdit(userId){
+    setUserId(userId);
     setEdit(true);
   }
 
-  function handleDelete(staffid){
-    setStaffId(staffid);
+  function handleDelete(userId){
+    setUserId(userId);
     setDelete(true)
   }
 
@@ -120,8 +118,8 @@ function Manageuser() {
       </div>
       
       {addUser && <AddUsers setAddUser={setAddUser}/> }
-      { edit && <EditUser staffid={staffid} setEdit={setEdit}/>}
-      {deleteUser && <DeleteUser id={staffid} setDelete={setDelete}/>}
+      {edit && <EditUser id={userId} setEdit={setEdit}/>}
+      {deleteUser && <DeleteUser id={userId} setDelete={setDelete}/>}
     </div>
   );
 }

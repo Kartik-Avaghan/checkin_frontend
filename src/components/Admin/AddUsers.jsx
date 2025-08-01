@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { useState } from "react";
 import { useToast } from "../ToastProvider";
 import Loader from "../Loader";
 import { X } from "lucide-react";
 
 function AddUsers({ setAddUser }) {
+
   const [users, setUsers] = useState({
     username: "",
     mobile: "",
     password: "",
     role: "staff",
   });
+
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
   const { addToast } = useToast();
 
   const handleChange = (e) => {
@@ -34,24 +34,24 @@ function AddUsers({ setAddUser }) {
       },
       body: JSON.stringify({ ...users }),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setUsers({ username: "", mobile: "", password: "", role: "" });
-        addToast("User added successfully!", "success");
-        setAddUser(false)
-      })
-      .catch((error) => {
-        console.error("Error in posting user:", error);
-        addToast("Could not add user. Please try again.", "error");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      addToast("User added successfully!", "success");
+      setUsers({ username: "", mobile: "", password: "", role: "" });
+      setAddUser(false)
+    })
+    .catch((error) => {
+      console.error("Error in posting user:", error);
+      addToast("Could not add user. Please try again.", "error");
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
   };
 
   return (

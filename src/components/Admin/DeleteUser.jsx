@@ -5,6 +5,11 @@ function DeleteUser({id , setDelete}) {
 
   const {addToast} = useToast();
 
+  if(!id){
+    addToast("Error accessing UserID" , "error")
+    setDelete(false);
+  }
+
   const handleDelete = () => {
     fetch(`http://localhost:8080/users/delete/${id}`, {
       method: "POST",
@@ -15,17 +20,17 @@ function DeleteUser({id , setDelete}) {
       },
     })
     .then((response) => {
-        if (!response.ok) {
-            throw new Error("Response was not ok");
-        }
-        return response.text();
+      if (!response.ok) {
+        throw new Error("Response was not ok");
+      }
+      return response.text();
     })
-    .then((message) => {
-        setDelete(false)
-        addToast("User Deleted Successfully" , "success");
+    .then((data) => {
+      setDelete(false)
+      addToast("User Deleted Successfully" , "success");
     })
     .catch((error) => {
-    console.log("Error in deleting user:", error);
+      console.log("Error in deleting user:", error);
     });
   };
 
@@ -40,7 +45,7 @@ function DeleteUser({id , setDelete}) {
                   <TriangleAlert />
                 </div>
                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                  <h3 as="h3" className="text-base font-semibold text-gray-900">
+                  <h3 className="text-base font-semibold text-gray-900">
                     Delete User
                   </h3>
                   <div className="mt-2">
@@ -73,7 +78,8 @@ function DeleteUser({id , setDelete}) {
           </div>
         </div>
       </div>
-      <div className='w-screen h-full absolute top-0 left-0 z-1 cursor-pointer overflow-hidden' onClick={() => setDelete(false)}></div>
+      <div className='w-screen h-full absolute top-0 left-0 z-1 cursor-pointer overflow-hidden'
+      onClick={() => setDelete(false)}></div>
     </div>
   );
 }
