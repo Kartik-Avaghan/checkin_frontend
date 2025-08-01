@@ -31,7 +31,7 @@ function DeleteUser({id , setDelete}) {
 
   return (
     <div>
-      <div className="fixed inset-0 z-10 w-screen left-0">
+      <div className="fixed inset-0 z-10 w-screen left-0 bg-black/80">
         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
           <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ">
             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -59,7 +59,7 @@ function DeleteUser({id , setDelete}) {
                 onClick={() => handleDelete()}
                 className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto cursor-pointer"
               >
-                Deactivate
+                Delete
               </button>
               <button
                 type="button"
@@ -73,7 +73,7 @@ function DeleteUser({id , setDelete}) {
           </div>
         </div>
       </div>
-      <div className='w-screen h-screen bg-black/80 absolute top-0 left-0 z-1 cursor-pointer' onClick={() => setDelete(false)}></div>
+      <div className='w-screen h-full absolute top-0 left-0 z-1 cursor-pointer overflow-hidden' onClick={() => setDelete(false)}></div>
     </div>
   );
 }

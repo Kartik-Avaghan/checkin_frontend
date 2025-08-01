@@ -133,8 +133,8 @@ function Manageuser() {
           Manage your organization's staff and admin users
         </h3> */}
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border-collapse">
+        <div className="overflow-x-auto rounded-lg shadow-sm">
+          <table className="min-w-full table-auto border-collaps">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
@@ -191,7 +191,7 @@ function Manageuser() {
                     </button>
                     <button
                       onClick={() => handleDelete(s.id)}
-                      className="hover:border-red-600 hover:text-white hover:bg-red-600 border-2 border-gray-300 p-2 rounded-lg cursor-pointer"
+                      className="hover:border-red-600 hover:text-white hover:bg-red-600 border-2 border-gray-300 p-2 rounded-lg cursor-pointer transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
