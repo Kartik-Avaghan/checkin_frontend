@@ -1,7 +1,7 @@
 import { useState , useEffect } from 'react';
 import { Menu, LogOut, X , Home , FileText, Power} from 'lucide-react';
 import { Link , useNavigate } from 'react-router';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
 
 function StaffNav() {
   const [toggle, setToggle] = useState(false);
