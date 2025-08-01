@@ -74,7 +74,7 @@ function EditUser({staffid , setEdit}) {
 
 
   return (
-    <div className='absolute z-50 top-0 left-0 w-full'>
+    <div className='fixed z-50 top-0 left-0 w-full h-full'>
       <div className='flex justify-center items-center h-screen'>
       <div className="m-8 sm:m-2 p-6 w-75 md:w-100 lg:w-125 bg-white rounded-lg shadow mt-8 relative z-50">
         <div className="flex flex-col items-center mb-6">
@@ -94,7 +94,7 @@ function EditUser({staffid , setEdit}) {
               value={formdata.username || ""}
               onChange={handlechange}
               placeholder="Enter full name"
-              className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="border border-gray-400 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
@@ -109,11 +109,11 @@ function EditUser({staffid , setEdit}) {
               value={formdata.mobile || ""}
               onChange={handlechange}
               placeholder="Enter mobile number"
-              className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="border border-gray-400 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col ">
             <label htmlFor="role" className="mb-1 text-gray-700 font-medium">
               Role
             </label>
@@ -122,7 +122,7 @@ function EditUser({staffid , setEdit}) {
               name='role'
               value={formdata.role || ""}
               onChange={handlechange}
-              className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="border border-gray-400 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
             >
               <option value="staff">Staff</option>
               <option value="admin">Admin</option>
@@ -133,13 +133,13 @@ function EditUser({staffid , setEdit}) {
             <button
               type="button"
               onClick={() => setEdit(false)}
-              className="border border-gray-400 text-gray-700 rounded-lg px-4 py-2 hover:bg-red-600 hover:text-white cursor-pointer"
+              className="border border-gray-400 text-gray-700 rounded-lg px-4 py-2 hover:bg-red-600 hover:text-white cursor-pointer font-semibold transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-sky-800 border-2 border-sky-800 text-white rounded-lg px-4 py-2 hover:bg-white hover:text-sky-800 cursor-pointer"
+              className="bg-sky-800 border-2 border-sky-800 text-white rounded-lg px-4 py-2 hover:bg-white hover:text-sky-800 cursor-pointer font-semibold transition-all"
             >
               Update User
             </button>

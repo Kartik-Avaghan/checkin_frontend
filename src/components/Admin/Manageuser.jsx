@@ -32,7 +32,7 @@ function Manageuser() {
     .catch((error) => {
       console.log("Fetching Error", error);
     });
-  }, [edit, deleteUser]);
+  }, [edit, deleteUser, addUser]);
 
   
 
@@ -69,8 +69,8 @@ function Manageuser() {
           Manage your organization's staff and admin users
         </h3>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border-collapse">
+        <div className="overflow-x-auto rounded-lg shadow-sm">
+          <table className="min-w-full table-auto border-collaps">
             <thead className="bg-gray-50">
               <tr >
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
@@ -96,18 +96,18 @@ function Manageuser() {
                 <tr key={s.id} className="border-t border-gray-300">
                   <td className="px-6 py-3">{s.username}</td>
                   <td className="px-6 py-3">{s.mobile}</td>
-                  <td className="px-6 py-3">{s.role == "admin" ? <span className="bg-blue-100 px-4 py-2 rounded-full">Admin</span> : <span className="px-4 py-2">Staff</span> }</td>
+                  <td className="px-6 py-3">{s.role == "admin" ? <span className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full">Admin</span> : <span className="px-4 py-2">Staff</span> }</td>
                   <td className="px-6 py-3">{s.status == true ? <span className="bg-green-100 px-4 py-2 rounded-full text-center text-green-700 text-nowrap">Active</span> : <span className="bg-red-50 px-4 py-2 rounded-full text-center text-red-700 text-nowrap">Logged out</span>} </td>
                   <td className="px-6 py-3 flex gap-2">
                     <button
-                      className="hover:border-green-600 hover:text-white hover:bg-green-600 border-2 border-gray-300 p-2 rounded-lg mr-2 cursor-pointer"
+                      className="hover:border-green-600 hover:text-white hover:bg-green-600 border-2 border-gray-300 p-2 rounded-lg mr-2 cursor-pointer transition-all"
                       onClick={() => {handleEdit(s.id)} }
                     >
                       <SquarePen className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(s.id)}
-                      className="hover:border-red-600 hover:text-white hover:bg-red-600 border-2 border-gray-300 p-2 rounded-lg cursor-pointer"
+                      className="hover:border-red-600 hover:text-white hover:bg-red-600 border-2 border-gray-300 p-2 rounded-lg cursor-pointer transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -119,7 +119,7 @@ function Manageuser() {
         </div>
       </div>
       
-      {addUser && <AddUsers/> }
+      {addUser && <AddUsers setAddUser={setAddUser}/> }
       { edit && <EditUser staffid={staffid} setEdit={setEdit}/>}
       {deleteUser && <DeleteUser id={staffid} setDelete={setDelete}/>}
     </div>
