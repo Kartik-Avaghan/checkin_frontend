@@ -63,6 +63,8 @@ function AddUsers({ setAddUser }) {
           <h1 className="text-2xl font-bold text-center mb-4">Add Users</h1>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+            <label htmlFor="role" className="mt-1 mb-0 pb-0">User Name</label>
             <input
               type="text"
               placeholder="Enter Username"
@@ -71,19 +73,23 @@ function AddUsers({ setAddUser }) {
               onChange={handleChange}
               required
               className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+            /> </div>
 
+            <div className="flex flex-col gap-2">
+            <label htmlFor="role" className="mt-1 mb-0 pb-0">Mobile Number</label>
             <input
               type="tel"
-              placeholder="Enter Mobile Number"
+              placeholder="Enter Mobile No."
               name="mobile"
               value={users.mobile}
               onChange={handleChange}
               required
               pattern="[0-9]{10}"
               className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+            /> </div>
 
+            <div className="flex flex-col gap-2">
+            <label htmlFor="role" className="mt-1 mb-0 pb-0">Password</label>
             <input
               type="password"
               placeholder="Enter password"
@@ -92,7 +98,7 @@ function AddUsers({ setAddUser }) {
               onChange={handleChange}
               required
               className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+            /> </div>
 
 
             <div className="flex flex-col gap-2">

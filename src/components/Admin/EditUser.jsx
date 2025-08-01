@@ -89,7 +89,7 @@ function EditUser({id , setEdit}) {
 
           <form className="flex flex-col gap-4" onSubmit={handleUpdate}>
             <div className="flex flex-col">
-              <label htmlFor="username" className="mb-1 text-gray-700 font-medium">
+              <label htmlFor="username" className="mb-1 text-gray-700">
                 User Name
               </label>
               <input
@@ -99,12 +99,12 @@ function EditUser({id , setEdit}) {
                 value={formdata.username || ""}
                 onChange={handlechange}
                 placeholder="Enter full name"
-                className="border border-gray-400 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="mobile" className="mb-1 text-gray-700 font-medium">
+              <label htmlFor="mobile" className="mb-1 text-gray-700">
                 Mobile Number
               </label>
               <input
@@ -114,12 +114,12 @@ function EditUser({id , setEdit}) {
                 value={formdata.mobile || ""}
                 onChange={handlechange}
                 placeholder="Enter mobile number"
-                className="border border-gray-400 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
 
             <div className="flex flex-col ">
-              <label htmlFor="role" className="mb-1 text-gray-700 font-medium">
+              <label htmlFor="role" className="mb-1 text-gray-700">
                 Role
               </label>
               <select
@@ -127,7 +127,7 @@ function EditUser({id , setEdit}) {
                 name='role'
                 value={formdata.role || ""}
                 onChange={handlechange}
-                className="border border-gray-400 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
               >
                 <option value="staff">Staff</option>
                 <option value="admin">Admin</option>
