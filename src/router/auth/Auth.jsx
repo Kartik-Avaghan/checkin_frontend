@@ -34,7 +34,7 @@ function Auth() {
       })
       .then((data) => {
         const role = data.replace(/[\[\]"]+/g, '').trim();
-        if( role === "ROLE_ADMIN") {
+        if( role === "ROLE_ADMIN" || role === "ROLE_SUPER_ADMIN") {
           navigate("/admin/dashboard");
         }
         if(role === "ROLE_STAFF") {

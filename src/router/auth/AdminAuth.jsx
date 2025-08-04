@@ -32,7 +32,8 @@ function AdminAuth() {
         return response.text();
       }).then((data) => {
         const role = data.replace(/[\[\]"]+/g, '').trim();
-        if( role === "ROLE_ADMIN") {
+        console.log(role);
+        if( role === "ROLE_ADMIN" || role === "ROLE_SUPER_ADMIN") {
           setIsAdmin(true);
         } 
       })

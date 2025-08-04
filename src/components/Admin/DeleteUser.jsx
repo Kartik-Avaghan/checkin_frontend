@@ -31,6 +31,8 @@ function DeleteUser({id , setDelete}) {
     })
     .catch((error) => {
       console.log("Error in deleting user:", error);
+      addToast("Error in deleting user" , "error");
+      setDelete(false)
     });
   };
 

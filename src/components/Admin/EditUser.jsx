@@ -1,13 +1,16 @@
 import { useState , useEffect } from 'react';
 import {useToast} from '../../components/ToastProvider'
+import { jwtDecode } from 'jwt-decode';
 
 function EditUser({id , setEdit}) {
 
   const [formdata, setFormData] = useState({
     username : "",
     mobile: "",
-    role: "",
+    role: "staff",
   });
+
+  const[superAdmin, setSuperAdmin] = useState(false);
 
   const {addToast} = useToast();
 
@@ -42,6 +45,15 @@ function EditUser({id , setEdit}) {
   }, [id]);
 
 
+  useEffect(() => {
+    const token = jwtDecode(localStorage.getItem("token"))
+    const role = token.role;
+    if(role === "ROLE_SUPER_ADMIN"){
+      setSuperAdmin(true);
+    } else { setSuperAdmin(false) }
+  },[])
+
+
   const handleUpdate = (e) => {
     e.preventDefault();
 
@@ -65,7 +77,9 @@ function EditUser({id , setEdit}) {
       setEdit(false)
     })
     .catch((error) => {
-    console.log("Error updating user:", error);
+      console.log("Error updating user:", error);
+      addToast("Error Updating User Details" , "error")
+      setEdit(false);
     });
   };
 
@@ -130,7 +144,7 @@ function EditUser({id , setEdit}) {
                 className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
               >
                 <option value="staff">Staff</option>
-                <option value="admin">Admin</option>
+                {superAdmin && <option value="admin">Admin</option> }
               </select>
             </div>
 

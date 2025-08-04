@@ -134,10 +134,10 @@ function Manageuser() {
                   <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
                     Mobile
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">
                     Role
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">
                     Status
                   </th>
                   <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">
@@ -151,16 +151,16 @@ function Manageuser() {
                   <tr key={s.id} className="border-t border-gray-300">
                     <td className="px-6 py-3">{s.username}</td>
                     <td className="px-6 py-3">{s.mobile}</td>
-                    <td className="px-6 py-3">
+                    <td className="px-6 py-3 text-nowrap text-center">
                       {s.role == "admin" ? (
                         <span className="bg-blue-100 px-4 py-2 rounded-full">
                           Admin
                         </span>
-                      ) : (
+                      ) : s.role == "super_admin" ? ( <span className="bg-amber-100 px-4 py-2 rounded-full"> Super Admin</span>) : (
                         <span className="px-4 py-2">Staff</span>
                       )}
                     </td>
-                    <td className="px-6 py-3">
+                    <td className="px-6 py-3 text-center">
                       {s.status == true ? (
                         <span className="bg-green-100 px-4 py-2 rounded-full text-center text-green-700 text-nowrap">
                           Active

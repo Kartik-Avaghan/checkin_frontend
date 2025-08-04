@@ -69,7 +69,7 @@ function Stats({ date }) {
       <div className="flex justify-between items-center w-75 md:w-100 md:h-25 text-center border-gray-300 border rounded-lg shadow-sm p-6">
         <div className="font-semibold text-wrap">
           <h2 className="text-lg md:text-xl text-gray-600">
-            Total Visitors Today{" "}
+            Total Visitors
           </h2>
           <h2 className="text-2xl md:text-3xl font-bold text-blue-500 mt-1 text-left">
             {stats.totalVisitors}

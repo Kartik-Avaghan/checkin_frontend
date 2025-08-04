@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "../ToastProvider";
 import Loader from "../Loader";
 import { X } from "lucide-react";
+import { jwtDecode } from "jwt-decode";
 
 function AddUsers({ setAddUser }) {
 
@@ -13,6 +14,7 @@ function AddUsers({ setAddUser }) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [superAdmin , setSuperAdmin] = useState(false)
 
   const { addToast } = useToast();
 
@@ -53,6 +55,14 @@ function AddUsers({ setAddUser }) {
       setIsLoading(false);
     });
   };
+
+  useEffect(() => {
+    const token = jwtDecode(localStorage.getItem("token"))
+    const role = token.role;
+    if(role === "ROLE_SUPER_ADMIN"){
+      setSuperAdmin(true);
+    } else { setSuperAdmin(false) }
+  },[])
 
   return (
     <div className="fixed z-50 top-0 left-0 w-full">
@@ -100,19 +110,17 @@ function AddUsers({ setAddUser }) {
               className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
             /> </div>
 
-
             <div className="flex flex-col gap-2">
-            <label htmlFor="role" className="mt-1 mb-0 pb-0">Choose Role</label>
-            <select
-              name="role"
-              value={users.role}
-              onChange={handleChange}
-              className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="admin">Admin</option>
-              <option value="staff">Staff</option>
-            </select>
-
+              <label htmlFor="role" className="mt-1 mb-0 pb-0">Choose Role</label>
+              <select
+                name="role"
+                value={users.role}
+                onChange={handleChange}
+                className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                <option value="staff">Staff</option>
+                {superAdmin && <option value="admin">Admin</option> }
+              </select>
             </div>
 
             <button
