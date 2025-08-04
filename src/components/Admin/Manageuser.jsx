@@ -21,7 +21,7 @@ function Manageuser() {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:8080/users/`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/users/`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -41,7 +41,6 @@ function Manageuser() {
     });
   }, [edit, deleteUser, addUser]);
 
-  
 
   function handleEdit(staffid){
     setUserId(staffid);
@@ -169,14 +168,12 @@ function Manageuser() {
                         <span className="bg-red-50 px-4 py-2 rounded-full text-center text-red-700 text-nowrap">
                           Inactive
                         </span>
-                      )}{" "}
+                      )}
                     </td>
                     <td className=" px-2 py-3 flex gap-4 justify-center">
                       <button
                         className="hover:border-green-600 hover:text-white hover:bg-green-600 border-2 border-gray-300 p-2 rounded-lg mr-2 cursor-pointer"
-                        onClick={() => {
-                          handleEdit(s.id);
-                        }}
+                        onClick={() => { handleEdit(s.id); }}
                       >
                         <SquarePen className="w-4 h-4" />
                       </button>

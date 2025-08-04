@@ -20,7 +20,7 @@ function Stats({ date }) {
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
 
-    fetch(`http://localhost:8080/visitors/stats/${date}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/visitors/stats/${date}`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -41,7 +41,7 @@ function Stats({ date }) {
         console.log("Error in fetching Visitors", error);
       });
 
-      fetch(`http://localhost:8080/users/count/active`, {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/users/count/active`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -49,19 +49,18 @@ function Stats({ date }) {
         Authorization: `${localStorage.getItem("token")}`,
       },
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setActiveStaff(data);
-      })
-      .catch((error) => {
-        console.log("Error in fetching Visitors", error);
-      });
-
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setActiveStaff(data);
+    })
+    .catch((error) => {
+      console.log("Error in fetching Visitors", error);
+    });
   }, [date]);
 
   return (

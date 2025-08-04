@@ -11,7 +11,7 @@ function DeleteUser({id , setDelete}) {
   }
 
   const handleDelete = () => {
-    fetch(`http://localhost:8080/users/delete/${id}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/users/delete/${id}`, {
       method: "POST",
       credentials: "include",
       headers: {

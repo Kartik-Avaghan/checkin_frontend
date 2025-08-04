@@ -33,7 +33,7 @@ const CheckedinVisitors = () => {
   const [update, setUpdate] = useState();
 
   useEffect(() => {
-    fetch(`http://localhost:8080/visitors/checkedin` ,
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/visitors/checkedin` ,
       {
         method: "GET",
         credentials: "include",
@@ -54,7 +54,7 @@ const CheckedinVisitors = () => {
   }, [update]);
 
   const handleCheckout = (id) => {
-    fetch(`http://localhost:8080/visitors/checkout/${id}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/visitors/checkout/${id}`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -165,7 +165,7 @@ const CheckedinVisitors = () => {
                     </button>
                   ) : (
                     <div className="mt-2 text-sm text-gray-600">
-                      Checked out at:{" "}
+                      Checked out at:
                       <strong>{formatTime(v.checkOutTime)}</strong>
                     </div>
                   )}
@@ -180,7 +180,7 @@ const CheckedinVisitors = () => {
 
               <div className="text-sm md:text-lg text-gray-700 p-2">
                 {/* Check-in: <strong>{formatDateTime(v.checkInTime)}</strong> */}
-                Check-in:{" "}
+                Check-in:
                 <strong>
                   {v.checkinDate && v.checkinTime
                     ? formatDateTime(`${v.checkinDate}T${v.checkinTime}`)
@@ -204,15 +204,11 @@ const CheckedinVisitors = () => {
               {expandedCard === v.id && (
                 <div className="mt-4 text-sm text-gray-600 space-y-1 ">
                   <div className="text-lg">
-                    <span className="font-medium text-gray-800 ">
-                      Visiting:
-                    </span>{" "}
+                    <span className="font-medium text-gray-800 "> Visiting: </span>
                     {v.visiting}
                   </div>
                   <div className="text-lg">
-                    <span className="font-medium text-gray-800 mt-2">
-                      Purpose:
-                    </span>{" "}
+                    <span className="font-medium text-gray-800 mt-2"> Purpose: </span>
                     {v.purpose}
                   </div>
                 </div>

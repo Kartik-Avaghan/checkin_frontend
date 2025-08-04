@@ -22,7 +22,7 @@ function EditUser({id , setEdit}) {
       return;
     }
 
-    fetch(`http://localhost:8080/users/${id}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/users/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ function EditUser({id , setEdit}) {
   const handleUpdate = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:8080/users/update/${id}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/users/update/${id}`, {
     method: "POST",
     credentials: "include",
     headers: {

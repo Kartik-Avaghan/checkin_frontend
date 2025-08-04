@@ -22,7 +22,7 @@ function StaffNav() {
 
   function handlelogout(){
 
-    fetch(`http://localhost:8080/users/update/logout/${username}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/users/update/logout/${username}`, {
       method: "POST",
       credentials: "include",
       headers: {

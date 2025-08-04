@@ -39,7 +39,7 @@ function VisitorReport() {
   const {addToast} = useToast();
   
   useEffect(()=>{
-    fetch(`http://localhost:8080/visitors/checkedin/${startDate}/${endDate}` , {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/visitors/checkedin/${startDate}/${endDate}` , {
       method: "GET",
       credentials: "include",
       headers: {

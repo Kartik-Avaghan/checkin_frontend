@@ -20,7 +20,7 @@ function AdminNav() {
   },[])
 
   function handlelogout() {
-    fetch(`http://localhost:8080/users/update/logout/${username}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/users/update/logout/${username}`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -65,10 +65,12 @@ function AdminNav() {
             <FileText className="text-white" size={24} />
             <button  className="hover:cursor-pointer"> Reports </button>
           </Link>
+
           <Link to={"/admin/users"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
             <Users className="text-white" size={24} />
             <button className="hover:cursor-pointer"> Manage Users </button>
           </Link>
+
           <Link to={"/admin/checkin"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
             <Plus className="text-white" size={24} />
             <button className="hover:cursor-pointer"> Checkin </button>
@@ -82,6 +84,7 @@ function AdminNav() {
           >
             Log Out <LogOut size={18} />
           </button>
+          
         </div>
       </div>
     </div>

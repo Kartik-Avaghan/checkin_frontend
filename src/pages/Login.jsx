@@ -14,7 +14,7 @@ function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    fetch("http://localhost:8080/auth/login", {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -37,7 +37,7 @@ function Login() {
   };
 
   function updatestatus(username){
-    fetch(`http://localhost:8080/users/update/login/${username}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/users/update/login/${username}`, {
       method: "POST",
       credentials: "include",
       headers: {

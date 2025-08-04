@@ -49,7 +49,7 @@ function Checkin() {
     e.preventDefault();
     setIsLoading(true);
 
-    fetch("http://localhost:8080/visitors/add", {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/visitors/add`, {
       method: "POST",
       credentials: "include",
       headers: {

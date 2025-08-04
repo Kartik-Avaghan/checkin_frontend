@@ -20,7 +20,7 @@ function Auth() {
     
     if (token && token.startsWith("Bearer ")) {
       
-      fetch("http://localhost:8080/auth/verify-token", {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/verify-token`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -34,6 +34,7 @@ function Auth() {
       })
       .then((data) => {
         const role = data.replace(/[\[\]"]+/g, '').trim();
+        console.log(role  )
         if( role === "ROLE_ADMIN" || role === "ROLE_SUPER_ADMIN") {
           navigate("/admin/dashboard");
         }
@@ -59,11 +60,6 @@ function Auth() {
   }, []);
 
   if (loading) return <Loader/>;
-
-  // const isAdminroute = location.pathname.startsWith("/admin");
-  // if (isAdminroute && isStaff) {
-  //   return <Navigate to="/" />;
-  // }
 
   return isStaff ? <Outlet /> : <Navigate to="/login" />;
 }

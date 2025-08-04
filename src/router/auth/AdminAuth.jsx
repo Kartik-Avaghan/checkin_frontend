@@ -19,7 +19,7 @@ function AdminAuth() {
     
     if (token && token.startsWith("Bearer ")) {
       
-      fetch("http://localhost:8080/auth/verify-token", {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/verify-token`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

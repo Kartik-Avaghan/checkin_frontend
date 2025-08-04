@@ -27,7 +27,7 @@ function AddUsers({ setAddUser }) {
     e.preventDefault();
     setIsLoading(true);
 
-    fetch("http://localhost:8080/users/add", {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/users/add`, {
       method: "POST",
       credentials: "include",
       headers: {

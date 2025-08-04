@@ -1,7 +1,6 @@
 import { Link } from 'react-router'
-import { Plus , CirclePlus , LogOut} from 'lucide-react'
+import { Plus , LogOut} from 'lucide-react'
 import StaffNav from '../../components/Staff/StaffNav'
-import CheckedinVisitors from '../../components/Staff/CheckedinVisitors'
 
 
 function StaffDashboard() {

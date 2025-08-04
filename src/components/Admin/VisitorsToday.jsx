@@ -31,7 +31,7 @@ function VisitorsToday({date}) {
 
     useEffect(()=>{
         const today = new Date().toISOString().split('T')[0];
-        fetch(`http://localhost:8080/visitors/checkedin/${date}` , {
+        fetch(`${import.meta.env.VITE_API_BASE_URL}/visitors/checkedin/${date}` , {
         method: "GET",
         credentials: "include",
         headers: {
@@ -104,7 +104,6 @@ function VisitorsToday({date}) {
                         <strong>Purpose:</strong> {v.purpose}
                         </div>
                     </div>
-
                 </div>
                 ))}
             </div>
