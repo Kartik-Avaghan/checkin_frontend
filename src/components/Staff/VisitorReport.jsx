@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Download, File , Clock4 , Phone , CircleAlert , ChartGantt , Users, Calendar } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { Download, File , Clock4 , Phone , CircleAlert , ChartGantt , Users, Calendar, Funnel, Search, X } from "lucide-react";
 
 import jsPDF from "jspdf";
 import { autoTable } from "jspdf-autotable";
@@ -32,11 +32,19 @@ function formatMinutes(totalMinutes) {
 
 function VisitorReport() {
 
-  const [staffFilter, setStaffFilter] = useState("all");
   const [data , setdata] = useState([]);
   const [startDate , setStartDate] = useState(new Date().toISOString().split("T")[0]);
   const [endDate , setEndDate] = useState(new Date().toISOString().split("T")[0]);
+  const [addfilters , setAddFilters] = useState(false);
+  const [filter, setFilter] = useState("all");
+  const [search , setSearch] = useState();
+
   const {addToast} = useToast();
+  const searchInputRef = useRef(null);
+
+  const handleFocusSearch = () => {
+    searchInputRef.current?.focus();
+  };
   
   useEffect(()=>{
     fetch(`${import.meta.env.VITE_API_BASE_URL}/visitors/checkedin/${startDate}/${endDate}` , {
@@ -59,7 +67,7 @@ function VisitorReport() {
     })
     .catch((error)=>{console.log("Error in fetching Visitors", error);});
 
-  },[startDate , endDate, staffFilter]);
+  },[startDate , endDate]);
 
   const CSVgenerator = (data) => {
     const array = Array.isArray(data) ? data : [data];
@@ -177,6 +185,22 @@ function VisitorReport() {
   },[endDate , startDate]);
 
 
+  const filteredData = data.filter((s)=>{
+    const name = s.name?.toLowerCase() || "";
+    const matchesSearch = name.includes((search || "").toLowerCase().trim());
+
+    const matchesStatus=
+    filter ==="all"|| 
+    (filter ==="active" && s.status === true)||
+    (filter ==="inactive" && s.status !== true);
+
+    return matchesSearch && matchesStatus
+  })
+
+
+  
+
+
   return (
     <div className="max-w-7xl mx-auto p-4">
       {/* Header */}
@@ -241,13 +265,61 @@ function VisitorReport() {
             <File size={16} />
             Export PDF
           </button>
+
+          <button
+            className={`${addfilters ? 'bg-white border-2 border-gray-400 text-black' : 'bg-black text-white' } hover:bg-blue-500  px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer`}
+            onClick={() => setAddFilters(!addfilters)}
+          >
+            { addfilters ? <X size={16} /> : <Funnel size={16} />}
+            { addfilters ? "Remove Filters" :  'Add Filters'}
+          </button>
         </div> 
       </div> 
+      
+      {addfilters && <div>
+        {/*  search & filters*/}
+        <div className="flex flex-col items-start space-y-3 mb-6 mt-10 w-full px-4">
+          <div className="flex items-center space-x-1 text-lg font-semibold">
+            <Funnel className="size-5 text-gray-500"/>
+            <span className="text-gray-500 text-start">Filters</span>
+          </div>
+
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 w-full">
+            {/* Search Box */}
+            <div className="relative w-full sm:max-w-sm">
+              <input
+                type="text"
+                ref={searchInputRef}
+                value={search}
+                onChange={(e)=>setSearch(e.target.value)}
+                placeholder="Search By Visitors name..."
+                className="w-full rounded-md border border-gray-300 px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                onClick={handleFocusSearch}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                <Search size={20} />
+              </button>
+            </div>  
+
+            {/* Role Dropdown */}
+            <select value={filter} onChange={((e)=>setFilter(e.target.value))} className="w-full sm:w-auto border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600 ">
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+      </div> }
+      
 
       {/* Mobile View */}
-      {data.length > 0 ? (
+      {filteredData.length > 0 ? (
         <div className="lg:hidden space-y-4">
-          {data.map((v) => (
+          {filteredData.map((v) => (
             <div
               key={v.id}
               className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm"
@@ -307,7 +379,7 @@ function VisitorReport() {
       )}
 
       {/* Desktop View */}
-      {data.length > 0 ? (
+      {filteredData.length > 0 ? (
         <div className="hidden lg:block">
           <div className="overflow-x-auto border border-gray-300 rounded-xl">
             <table className="min-w-full text-sm">
@@ -325,7 +397,7 @@ function VisitorReport() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((v) => (
+                {filteredData.map((v) => (
                   <tr key={v.id} className="border-t border-gray-300">
                     <td className="p-3 font-medium">{v.name}</td>
                     <td className="p-3">{v.mobile}</td>
