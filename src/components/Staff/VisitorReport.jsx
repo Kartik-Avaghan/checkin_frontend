@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Download, File , Clock4 , Phone , CircleAlert , ChartGantt , Users, Calendar, Funnel, Search, X } from "lucide-react";
 
 import jsPDF from "jspdf";
@@ -37,7 +37,8 @@ function VisitorReport() {
   const [endDate , setEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [addfilters , setAddFilters] = useState(false);
   const [filter, setFilter] = useState("all");
-  const [search , setSearch] = useState();
+  const [search , setSearch] = useState("");
+  const [debouncedSearch , setDebouncedSearch] = useState(search);
 
   const {addToast} = useToast();
   const searchInputRef = useRef(null);
@@ -119,9 +120,9 @@ function VisitorReport() {
     doc.text("Visitors Report", 14, 20);
     doc.setFontSize(12);
     if (startDate === endDate) {
-      doc.text(`Date: ${new Date(startDate).toLocaleDateString("IN")}`, 14, 29);
+      doc.text(`Date: ${new Date(startDate).toLocaleDateString("en-IN")}`, 14, 29);
     } else {
-      doc.text(`From: ${ new Date(startDate).toLocaleDateString("IN")}   To: ${new Date(endDate).toLocaleDateString("IN")}`, 14, 29);
+      doc.text(`From: ${ new Date(startDate).toLocaleDateString("en-IN")}   To: ${new Date(endDate).toLocaleDateString("en-IN")}`, 14, 29);
     }
     
     autoTable(doc, {
@@ -157,9 +158,9 @@ function VisitorReport() {
     });
     
     if(startDate === endDate) {
-      doc.save(`${new Date(startDate).toLocaleDateString("in")} - visitors_report.pdf`);
+      doc.save(`${new Date(startDate).toLocaleDateString("en-IN")} - visitors_report.pdf`);
     } else{
-      doc.save(`${new Date(startDate).toLocaleDateString("in")} - ${new Date(endDate).toLocaleDateString("in")} visitors_report.pdf`);
+      doc.save(`${new Date(startDate).toLocaleDateString("en-IN")} - ${new Date(endDate).toLocaleDateString("en-IN")} visitors_report.pdf`);
     }
   };
 
@@ -185,27 +186,34 @@ function VisitorReport() {
   },[endDate , startDate]);
 
 
-  const filteredData = data.filter((s)=>{
-    const name = s.name?.toLowerCase() || "";
-    const matchesSearch = name.includes((search || "").toLowerCase().trim());
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search)
+    }, 300);
+    return () => clearTimeout(handler);
+  },[search])
 
-    const matchesStatus=
-    filter ==="all"|| 
-    (filter ==="active" && s.status === true)||
-    (filter ==="inactive" && s.status !== true);
+  const filteredData = useMemo(() => {
+    return data.filter((s)=> {
+      const name = s.name?.toLowerCase() || "";
+      const matchesSearch = name.includes((debouncedSearch || "").toLowerCase().trim());
 
-    return matchesSearch && matchesStatus
-  })
+      const matchesStatus =
+      filter ==="all"|| 
+      (filter ==="active" && s.status === true)||
+      (filter ==="inactive" && s.status !== true);
+
+      return matchesSearch && matchesStatus
+    })
+  },[data , debouncedSearch , filter])
 
   useEffect(() => {
     if(addfilters == false ){
-      setSearch();
+      setSearch("");
       setFilter("all")
     }
   },[addfilters])
 
-
-  
   return (
     <div className="max-w-7xl mx-auto p-4">
       {/* Header */}
@@ -228,7 +236,7 @@ function VisitorReport() {
                 className="border border-gray-300 px-3 py-2 rounded-md ml-2"
               />
             </div>
-            
+
             <div className="xl:ml-4">
               <label htmlFor="enddate" className="xl:">End Date: </label>
               <input
@@ -243,7 +251,7 @@ function VisitorReport() {
           </div>
         </div>
         
-        <div className="flex gap-2 flex-wrap justify-center">
+        <div className="flex gap-4 flex-wrap justify-center">
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer"
             onClick={downloadCSV}
@@ -272,10 +280,10 @@ function VisitorReport() {
       
       {addfilters && <div>
         {/*  search & filters*/}
-        <div className="flex flex-col items-start space-y-3 mb-6 mt-10 w-full px-4">
-          <div className="flex items-center space-x-1 text-lg font-semibold">
-            <Funnel className="size-5 text-gray-500"/>
-            <span className="text-gray-500 text-start">Filters</span>
+        <div className="flex flex-col items-start space-y-3 mb-6 mt-7 md:mt-10 w-full px-4">
+          <div className="flex items-center space-x-1 text-lg font-semibold text-gray-600">
+            <Funnel size={18}/>
+            <span className=" text-start text-md">Filters</span>
           </div>
 
           <div className="flex flex-col sm:flex-row justify-between sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 w-full">
@@ -321,15 +329,15 @@ function VisitorReport() {
                 
                 <div>
                   <div className="text-lg font-semibold">{v.name}</div>
-                  <div className="text-sm text-gray-600 mt-1 flex items-center gap-1"><Phone size={12}/> {v.mobile}</div>
+                  <div className="text-sm text-gray-600 mt-1 flex items-center gap-1"><Phone size={12}/>{v.mobile}</div>
                 </div>
                 <div className="mt-2 ">
                   {v.status === true ? (
-                    <span className="bg-green-600 text-white text-sm px-3 py-1 rounded-full text-nowrap">
+                    <span className="bg-green-600 text-white text-sm px-3 py-2 rounded-full text-nowrap">
                       In Office
                     </span>
                   ) : (
-                    <span className="bg-gray-200 text-gray-800 text-sm px-3 py-1 rounded-full text-nowrap">
+                    <span className="bg-gray-200 text-gray-800 text-sm px-3 py-2 rounded-full text-nowrap">
                       Checked Out
                     </span>
                   )}

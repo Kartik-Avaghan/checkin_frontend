@@ -64,7 +64,7 @@ function Stats({ date }) {
   }, [date]);
 
   return (
-    <div className="flex items-center justify-center gap-8 flex-wrap p-8">
+    <div className="flex items-center justify-center gap-4 lg:gap-8 flex-wrap p-4">
       <div className="flex justify-between items-center w-75 md:w-100 md:h-25 text-center border-gray-300 border rounded-lg shadow-sm p-6">
         <div className="font-semibold text-wrap">
           <h2 className="text-lg md:text-xl text-gray-600">

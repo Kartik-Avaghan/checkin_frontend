@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
-import {
-  UserRoundSearch,
-  LogOut,
-  ChevronDown,
-  ChevronUp,
-  UserRoundX,
-  Search,
-  Phone,
-} from "lucide-react";
+import { UserRoundSearch, LogOut, ChevronDown, ChevronUp, UserRoundX, Search, Phone, } from "lucide-react";
 import { useRef } from "react";
+import { useToast } from "../ToastProvider";
 
 function formatTime(timeStr) {
   const date = new Date(timeStr);
@@ -31,6 +24,8 @@ const CheckedinVisitors = () => {
   const [expandedCard, setExpandedCard] = useState(null);
   const inputRef = useRef();
   const [update, setUpdate] = useState();
+
+  const {addToast} = useToast();
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/visitors/checkedin` ,
@@ -68,10 +63,8 @@ const CheckedinVisitors = () => {
       }
       return response.json();
     })
-    .then((updatedVisitor) => {
-      setVisitors((preData) =>
-        preData.map((v) => (v.id === updatedVisitor.id ? updatedVisitor : v))
-      );
+    .then((data) => {
+      addToast("Checked Out Successfully" , "success");
     })
     .catch((error) => console.log("Error during checkout:", error))
     .finally(() => { setUpdate(id); });
@@ -132,11 +125,11 @@ const CheckedinVisitors = () => {
 
       {/*  Cards */}
       {filteredVisitors.length > 0 ? (
-        <div className=" space-y-4">
+        <div className="space-y-4">
           {filteredVisitors.map((v) => (
             <div
               key={v.id}
-              className="border border-gray-300 rounded-xl p-4 shadow-sm transition hover:shadow-md cursor-pointer"
+              className="border border-gray-300 rounded-xl p-3 shadow-sm transition hover:shadow-md cursor-pointer"
               onClick={() => toggleExpand(v.id)}
             >
               <div className="flex justify-between items-center">
@@ -152,7 +145,7 @@ const CheckedinVisitors = () => {
                         e.stopPropagation();
                         handleCheckout(v.id);
                       }}
-                      className="mt-2 bg-red-100 text-red-600 px-4 py-2 rounded-full text-sm hover:bg-red-200 flex items-center gap-1 "
+                      className="mt-2 bg-red-100 text-red-600 px-4 py-2.5 rounded-full text-sm hover:bg-red-200 flex items-center gap-1 "
                     >
                       <LogOut size={16} />
                       Check Out
@@ -164,27 +157,22 @@ const CheckedinVisitors = () => {
                     </div>
                   )}
 
-                  {expandedCard === v.id ? (
-                    <ChevronUp size={18} />
-                  ) : (
-                    <ChevronDown size={18} />
-                  )}
                 </div>
               </div>
 
               <div className="text-sm md:text-lg text-gray-700 p-2">
                 {/* Check-in: <strong>{formatDateTime(v.checkInTime)}</strong> */}
                 Check-in:
-                <strong>
+                <strong className="ml-1 text-sm">
                   {v.checkinDate && v.checkinTime
                     ? formatDateTime(`${v.checkinDate}T${v.checkinTime}`)
                     : "N/A"}
                 </strong>
               </div>
 
-              <div className="my-2">
+              <div className="my-2 flex items-center justify-between">
                 {v.status === true ? (
-                  <span className="bg-green-600 text-white px-3 py-2 text-sm rounded-full">
+                  <span className="bg-green-600 text-white px-3 py-1.5 text-sm rounded-full">
                     Checked In
                   </span>
                 ) : (
@@ -192,16 +180,24 @@ const CheckedinVisitors = () => {
                     Checked Out
                   </span>
                 )}
+
+                {expandedCard === v.id ? (
+                  <ChevronUp size={18} />
+                ) : (
+                  <ChevronDown size={18} />
+                )}
               </div>
+
+              
 
               {/* Expanded details */}
               {expandedCard === v.id && (
-                <div className="mt-4 text-sm text-gray-600 space-y-1 ">
-                  <div className="text-lg">
+                <div className="mt-4 text-gray-600 space-y-1 ">
+                  <div className="text-md">
                     <span className="font-medium text-gray-800 "> Visiting: </span>
                     {v.visiting}
                   </div>
-                  <div className="text-lg">
+                  <div className="text-md">
                     <span className="font-medium text-gray-800 mt-2"> Purpose: </span>
                     {v.purpose}
                   </div>

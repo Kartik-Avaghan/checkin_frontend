@@ -77,7 +77,7 @@ function AdminNav() {
           </Link>
 
           <button
-            className="mt-auto flex items-center justify-center gap-2 bg-gray-900 hover:bg-white px-4 py-2 rounded-full transition cursor-pointer  hover:text-black"
+            className="mt-auto flex items-center justify-center gap-2 bg-gray-900 hover:bg-white px-4 py-3 rounded-full transition cursor-pointer  hover:text-black"
             onClick={() => {
               handlelogout();
             }}

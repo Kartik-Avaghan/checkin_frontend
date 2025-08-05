@@ -167,8 +167,8 @@ function Manageuser() {
                         </span>
                       )}
                     </td>
-                    <td className=" px-2 py-3 flex gap-4 justify-center">
-                      {s.role == "super_admin" ? <></> : <div>
+                    <td className="ml-2 px-2 py-3 flex gap-4 justify-center">
+                      {s.role == "super_admin" ? <></> : <div className="flex flex-nowrap gap-4">
                       <button
                         className="hover:border-green-600 hover:text-white hover:bg-green-600 border-2 border-gray-300 p-2 rounded-lg mr-2 cursor-pointer"
                         onClick={() => { handleEdit(s.id); }}
