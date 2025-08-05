@@ -87,7 +87,7 @@ function Checkin() {
         {isLoading &&  <Loader />}
         <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl mt-10">
           <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
-            <UserPlus className="text-blue-600" />
+            <UserPlus className="text-blue-500" />
             Visitor Check-in
           </h2>
 

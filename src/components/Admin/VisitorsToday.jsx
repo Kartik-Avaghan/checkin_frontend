@@ -96,13 +96,9 @@ function VisitorsToday({date}) {
                         <Clock4 size={16} /> Duration: {v.checkoutTime ? formatMinutes(v.duration) : "-" }
                     </div> }
 
-                    <div className="flex mt-2 text-sm text-gray-700 gap-4 sm:gap-5 flex-wrap">
-                        <div>
-                        <strong>Visiting:</strong> {v.visiting}
-                        </div>
-                        <div className="">
-                        <strong>Purpose:</strong> {v.purpose}
-                        </div>
+                    <div className="flex mt-2 text-sm text-gray-700 gap-2 sm:gap-5 flex-wrap">
+                        <div> <strong>Visiting:</strong> {v.visiting} </div>
+                        <div> <strong>Purpose:</strong> {v.purpose} </div>
                     </div>
                 </div>
                 ))}

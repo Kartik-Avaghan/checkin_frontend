@@ -90,12 +90,12 @@ function VisitorReport() {
   };
 
   const downloadCSV = () => {
-    if (data.length === 0) {
+    if (filteredData.length === 0) {
       addToast("No Data to Export", "warning");
       return;
     }
 
-    const csv = CSVgenerator(data);
+    const csv = CSVgenerator(filteredData);
     const blob = new Blob([csv], { type: "text/csv" });
     // create anchor tag for download purpose
     const link = document.createElement("a");
@@ -107,7 +107,7 @@ function VisitorReport() {
 
   const downloadPDF = () => {
 
-    if (data.length === 0) {
+    if (filteredData.length === 0) {
       addToast("No Data to Export", "warning");
       return;
     }
@@ -141,14 +141,14 @@ function VisitorReport() {
           "Staff Incharge",
         ],
       ],
-      body: data.map((item , index) => [
+      body: filteredData.map((item , index) => [
         index + 1,
         item.name,
         item.mobile,
         item.checkinDate ? new Date(item.checkinDate).toLocaleDateString("in") : "-",
         item.checkinTime ? formatTime(item.checkinTime) : "-",
         item.checkoutTime ? formatTime(item.checkoutTime) : "-",
-        formatMinutes(item.duration),
+        item.duration ? formatMinutes(item.duration) : "-",
         item.visiting,
         item.purpose,
         item.checkedInBy
@@ -197,21 +197,26 @@ function VisitorReport() {
     return matchesSearch && matchesStatus
   })
 
+  useEffect(() => {
+    if(addfilters == false ){
+      setSearch();
+      setFilter("all")
+    }
+  },[addfilters])
+
 
   
-
-
   return (
     <div className="max-w-7xl mx-auto p-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
-        <div className="flex items-center gap-2 text-blue-600">
+        <div className="flex items-center gap-2 text-blue-500">
           <Users/>
           <h2 className="text-2xl font-bold text-nowrap"> Visitors Reports</h2>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
+          <div className="flex items-center justify-center gap-2 px-3 py-2 flex-wrap">
             <div>
               <label htmlFor="startdate">Start Date: </label>
               <input
@@ -223,35 +228,24 @@ function VisitorReport() {
                 className="border border-gray-300 px-3 py-2 rounded-md ml-2"
               />
             </div>
-            <div>
-              <label htmlFor="enddate" className="lg:ml-4">End Date: </label>
+            
+            <div className="xl:ml-4">
+              <label htmlFor="enddate" className="xl:">End Date: </label>
               <input
                 type="date"
                 name="enddate"
                 id="enddate"
                 value={endDate}
                 onChange={(e) => setEndDate( e.target.value)}
-                className="border border-gray-300 px-3 py-2 rounded-md ml-2"
+                className="border border-gray-300 px-3 py-2 rounded-md ml-4 lg:ml-2"
               />
             </div>
           </div>
-          {/* <div className="flex items-center gap-2 border border-gray-300 px-3 py-2 rounded-md">
-            <Filter size={16} />
-            <select
-              value={staffFilter}
-              onChange={(e) => setStaffFilter(e.target.value)}
-              className="text-sm bg-transparent outline-none"
-            >
-              <option value="all">All Staff Members</option>
-              <option value="hr">HR Director</option>
-              <option value="it">IT Manager</option>
-            </select>
-          </div> */}
         </div>
         
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap justify-center">
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer"
             onClick={downloadCSV}
           >
             <Download size={16} />
@@ -259,7 +253,7 @@ function VisitorReport() {
           </button>
 
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer border-2"
             onClick={downloadPDF}
           >
             <File size={16} />
@@ -267,11 +261,11 @@ function VisitorReport() {
           </button>
 
           <button
-            className={`${addfilters ? 'bg-white border-2 border-gray-400 text-black' : 'bg-black text-white' } hover:bg-blue-500  px-4 py-2 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer`}
+            className={`${addfilters ? 'bg-white border-2 border-gray-400 text-black hover:bg-black hover:text-white ' : 'bg-black text-white  hover:bg-gray-700'  } px-4 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer `}
             onClick={() => setAddFilters(!addfilters)}
           >
             { addfilters ? <X size={16} /> : <Funnel size={16} />}
-            { addfilters ? "Remove Filters" :  'Add Filters'}
+            { addfilters ? " Remove Filters" :  ' Add Filters'}
           </button>
         </div> 
       </div> 
@@ -312,7 +306,6 @@ function VisitorReport() {
             </select>
           </div>
         </div>
-
       </div> }
       
 

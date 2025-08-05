@@ -64,15 +64,13 @@ function Manageuser() {
     return matchesSearch && matchesStatus
   })
 
+
   return (
 
     <div className="max-w-5xl mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <div className="flex flex-col">
-          <h2 className="text-2xl font-bold">User Management</h2>
-          <h3 className="text-sm text-gray-600">
-            Manage staff and admin users
-          </h3>
+          <h2 className="text-xl md:text-2xl font-bold w-25 sm:w-fit">User Management</h2>
         </div>
 
         <button
@@ -170,6 +168,7 @@ function Manageuser() {
                       )}
                     </td>
                     <td className=" px-2 py-3 flex gap-4 justify-center">
+                      {s.role == "super_admin" ? <></> : <div>
                       <button
                         className="hover:border-green-600 hover:text-white hover:bg-green-600 border-2 border-gray-300 p-2 rounded-lg mr-2 cursor-pointer"
                         onClick={() => { handleEdit(s.id); }}
@@ -181,7 +180,7 @@ function Manageuser() {
                         className="hover:border-red-600 hover:text-white hover:bg-red-600 border-2 border-gray-300 p-2 rounded-lg cursor-pointer transition-all"
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
+                      </button> </div> }
                     </td>
                   </tr>
                 ))}

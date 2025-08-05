@@ -107,34 +107,28 @@ const CheckedinVisitors = () => {
         Visitors List
       </h2>
 
-      {/* Search & Filter */}
-      <div className="flex  md:flex-row gap-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search visitors..."
-          className="w-full md:w-1/2 px-4 py-2 rounded-md border border-gray-300"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          ref={inputRef}
-        />
-        <button
-          onClick={handleIconClick}
-          type="button"
-          className="ml-2 text-gray-400 hover:text-gray-700 cursor-pointer"
-        >
-          <Search size={36} strokeWidth={1} />
-        </button>
-
-        {/* <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-full md:w-48 px-4 py-2 rounded-md border border-gray-300 bg-white"
-        >
-          <option value="all">All Status</option>
-          <option value="true">Checked In</option>
-          <option value="false">Checked Out</option>
-        </select> */}
+      {/* search bar */}
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 w-full mb-4">
+        {/* Search Box */}
+        <div className="relative w-full sm:max-w-sm">
+          <input
+            type="text"
+            ref={inputRef}
+            value={search}
+            onChange={(e)=>setSearch(e.target.value)}
+            placeholder="Search Vistors..."
+            className="w-full rounded-md border border-gray-300 px-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="button"
+            onClick={handleIconClick}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+          >
+            <Search size={20} />
+          </button>
+        </div>
       </div>
+
 
       {/*  Cards */}
       {filteredVisitors.length > 0 ? (
