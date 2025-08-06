@@ -47,6 +47,7 @@ function AdminNav() {
     <div className="relative">
       <div className="z-50 p-4 bg-sky-700 flex justify-between">
         <Menu className="text-white hover:cursor-pointer" onClick={() => setToggle(!toggle)} />
+        <h4 className='text-white text-sm'> Welcome {username}</h4>
         <Power className="text-white cursor-pointer" onClick={() => setLogout(true)}/>
       </div>
 

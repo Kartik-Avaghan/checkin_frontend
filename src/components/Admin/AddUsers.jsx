@@ -43,6 +43,7 @@ function AddUsers({ setAddUser }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
+    let handled = false;
 
     fetch(`${import.meta.env.VITE_API_BASE_URL}/users/add`, {
       method: "POST",
@@ -53,8 +54,11 @@ function AddUsers({ setAddUser }) {
       },
       body: JSON.stringify({ ...users }),
     })
-    .then((response) => {
+    .then(async (response) => {
       if (!response.ok) {
+        const message = response.text();
+        addToast(message , "error");
+        handled = true
         throw new Error("Response was not ok");
       }
       return response.json();
@@ -65,8 +69,10 @@ function AddUsers({ setAddUser }) {
       setAddUser(false)
     })
     .catch((error) => {
+      if(!handled){
       console.error("Error in posting user:", error);
       addToast("Could not add user. Please try again.", "error");
+      }
     })
     .finally(() => {
       setIsLoading(false);

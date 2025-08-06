@@ -4,7 +4,13 @@ import { useRef } from "react";
 import { useToast } from "../ToastProvider";
 
 function formatTime(timeStr) {
-  const date = new Date(timeStr);
+  if (!timeStr) return "-"; 
+
+  const today = new Date().toISOString().split('T')[0]; // "current date"
+  const date = new Date(`${today}T${timeStr}`); // combine date + time
+
+  if (isNaN(date)) return "-"; // invalid input
+
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 

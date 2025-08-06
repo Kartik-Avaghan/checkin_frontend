@@ -43,8 +43,10 @@ function StaffNav() {
   return (
     <div className="relative">
   
-      <div className="z-50 p-4 bg-sky-700  cursor-pointer flex justify-between">
+      <div className="z-50 p-4 bg-sky-700  cursor-pointer flex justify-between items-center
+      ">
         <Menu className="text-white" onClick={() => setToggle(!toggle)}/>
+        <h4 className='text-white text-sm'> Welcome {username}</h4>
         <Power className="text-white" onClick={() => setLogout(true)}/>
       </div>
       
@@ -71,10 +73,9 @@ function StaffNav() {
           >
             Log Out <LogOut size={18} />
           </button>
-
         </div>
       </div>
-
+      
       {logout && <Logout setLogOut={setLogout}/>}
     </div>
   );

@@ -269,7 +269,7 @@ function VisitorReport() {
             onClick={downloadCSV}
           >
             <Download size={16} />
-            Export CSV
+            Download Excel
           </button>
 
           <button
@@ -277,7 +277,7 @@ function VisitorReport() {
             onClick={downloadPDF}
           >
             <File size={16} />
-            Export PDF
+            Download PDF
           </button>
 
           <button

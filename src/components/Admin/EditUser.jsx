@@ -8,6 +8,7 @@ function EditUser({id , setEdit}) {
     username : "",
     mobile: "",
     role: "staff",
+    password : ""
   });
 
   const[superAdmin, setSuperAdmin] = useState(false);
@@ -34,7 +35,8 @@ function EditUser({id , setEdit}) {
       setFormData({
         username: data.username,
         mobile: data.mobile,
-        role: data.role
+        role: data.role,
+        password : data.password,
       }); 
     })
     .catch((err) => {
@@ -43,7 +45,6 @@ function EditUser({id , setEdit}) {
       setEdit(false);
     });
   }, [id]);
-
 
   useEffect(() => {
     const token = jwtDecode(localStorage.getItem("token"))
@@ -128,6 +129,20 @@ function EditUser({id , setEdit}) {
                 value={formdata.mobile || ""}
                 onChange={handlechange}
                 placeholder="Enter mobile number"
+                className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="password" className="mb-1 text-gray-700">
+                Password
+              </label>
+              <input
+                type="text"
+                id="password"
+                name='password'
+                onChange={handlechange}
+                placeholder="Enter new password"
                 className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
