@@ -321,8 +321,8 @@ function VisitorReport() {
             {/* Role Dropdown */}
             <select value={filter} onChange={((e)=>setFilter(e.target.value))} className="w-full sm:w-auto border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600 ">
               <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="active">In Office</option>
+              <option value="inactive">Checked-Out</option>
             </select>
           </div>
         </div>

@@ -81,12 +81,12 @@ function Manageuser() {
         </button>
       </div>
 
-      <div className="flex flex-col items-start space-y-3 mb-6 mt-10 w-full px-4">
+      <div className="flex flex-col items-start space-y-3 mb-4 mt-10 w-full px-4">
         {/* Header */}
-        <div className="flex items-center space-x-1 text-lg font-semibold">
+        {/* <div className="flex items-center space-x-1 text-lg font-semibold">
           <Funnel className="size-5 text-gray-500"/>
           <span className="text-gray-500 text-start">Filter</span>
-        </div>
+        </div> */}
 
         {/* search and filters */}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 w-full">
