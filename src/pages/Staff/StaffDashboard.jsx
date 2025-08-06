@@ -18,7 +18,7 @@ function StaffDashboard() {
     <div>
       <StaffNav/>
 
-      <div className='w-full h-[70vh] flex flex-col gap-8 items-center justify-start mt-6'>
+      <div className='w-full h-[70vh] flex flex-col gap-8 lg:gap-16 items-center justify-start mt-6'>
 
         <div className='flex flex-wrap p-2'>
           <h6 className='flex items-center gap-2 text-sm text-zinc-500'><Calendar size={16}/> {currentTime.toLocaleString('en-IN', {dateStyle: 'medium', timeStyle: 'short', })} </h6>
