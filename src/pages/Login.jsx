@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { data, useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { useToast } from '../components/ToastProvider';
 import Loader from '../components/Loader';
 function Login() {
@@ -49,6 +49,13 @@ function Login() {
     .then((data) => {console.log(data); navigate("/");})
     .catch((err) => console.log(err))
   }
+
+  useEffect(() => {
+    let token = localStorage.getItem("token")
+    if(token){
+      navigate("/")
+    }
+  },[])
 
   if(isLoading){
     return <Loader />;

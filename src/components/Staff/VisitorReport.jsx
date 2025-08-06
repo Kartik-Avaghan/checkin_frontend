@@ -193,19 +193,31 @@ function VisitorReport() {
     return () => clearTimeout(handler);
   },[search])
 
+
   const filteredData = useMemo(() => {
-    return data.filter((s)=> {
-      const name = s.name?.toLowerCase() || "";
-      const matchesSearch = name.includes((debouncedSearch || "").toLowerCase().trim());
+  return data.filter((s) => {
+    const search = String(debouncedSearch || "").toLowerCase().trim();
 
-      const matchesStatus =
-      filter ==="all"|| 
-      (filter ==="active" && s.status === true)||
-      (filter ==="inactive" && s.status !== true);
+    const name = String(s.name ?? "").toLowerCase();
+    const mobile = String(s.mobile ?? "").toLowerCase(); // ← mobile is a number
+    const visiting = String(s.visiting ?? "").toLowerCase();
+    const purpose = String(s.purpose ?? "").toLowerCase();
 
-      return matchesSearch && matchesStatus
-    })
-  },[data , debouncedSearch , filter])
+    const matchesSearch =
+      name.includes(search) ||
+      mobile.includes(search) ||
+      visiting.includes(search) ||
+      purpose.includes(search);
+
+    const matchesStatus =
+      filter === "all" ||
+      (filter === "active" && s.status === true) ||
+      (filter === "inactive" && s.status !== true);
+
+    return matchesSearch && matchesStatus;
+  });
+}, [data, debouncedSearch, filter]);
+
 
   useEffect(() => {
     if(addfilters == false ){

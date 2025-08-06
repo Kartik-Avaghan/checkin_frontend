@@ -2,9 +2,11 @@ import { useState , useEffect } from 'react';
 import { Menu, LogOut, X , Home , FileText, Power} from 'lucide-react';
 import { Link , useNavigate } from 'react-router';
 import { jwtDecode } from 'jwt-decode';
+import Logout from '../Logout';
 
 function StaffNav() {
   const [toggle, setToggle] = useState(false);
+  const [logout , setLogout] = useState(false);
   const [username , setusername] = useState();
   const navigate = useNavigate();
 
@@ -43,9 +45,9 @@ function StaffNav() {
   
       <div className="z-50 p-4 bg-sky-700  cursor-pointer flex justify-between">
         <Menu className="text-white" onClick={() => setToggle(!toggle)}/>
-        <Power className="text-white" onClick={() => handlelogout()}/>
+        <Power className="text-white" onClick={() => setLogout(true)}/>
       </div>
-
+      
       {/* Sidebar */}
       <div className={`fixed z-99 top-0 left-0 h-full w-64 bg-sky-800 text-white shadow-lg transform transition-transform duration-300 ease-in-out ${toggle ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col p-6 space-y-4 text-lg font-medium">
@@ -72,6 +74,8 @@ function StaffNav() {
 
         </div>
       </div>
+
+      {logout && <Logout setLogOut={setLogout}/>}
     </div>
   );
 }

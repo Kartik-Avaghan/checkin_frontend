@@ -13,6 +13,10 @@ function AddUsers({ setAddUser }) {
     role: "staff",
   });
 
+  const[ pass , setPass] = useState("");
+  const[ repass , setRePass] = useState(""); 
+  const [repasserror , setrePassError] = useState(false)
+
   const [isLoading, setIsLoading] = useState(false);
   const [superAdmin , setSuperAdmin] = useState(false)
 
@@ -22,6 +26,19 @@ function AddUsers({ setAddUser }) {
     const { name, value } = e.target;
     setUsers((prevData) => ({ ...prevData, [name]: value }));
   };
+
+  useEffect(() => {
+    if(pass === repass){
+      setUsers((prev) => ({
+        ...prev,
+        password: repass,
+      }))
+      setrePassError(false)
+    } else {
+      setrePassError(true)
+    }
+  },[repass])
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -99,16 +116,31 @@ function AddUsers({ setAddUser }) {
             /> </div>
 
             <div className="flex flex-col gap-2">
-            <label htmlFor="role" className="mt-1 mb-0 pb-0">Password</label>
-            <input
-              type="password"
-              placeholder="Enter password"
-              name="password"
-              value={users.password}
-              onChange={handleChange}
-              required
-              className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            /> </div>
+              <label htmlFor="role" className="mt-1 mb-0 pb-0">Password</label>
+              <input
+                type="password"
+                placeholder="Enter password"
+                name="password"
+                defaultValue={users.password}
+                onChange={(e) => setPass(e.target.value) }
+                required
+                className="border border-gray-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              /> 
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="role" className="mt-1 mb-0 pb-0">Re-Enter Password</label>
+              <input
+                type="password"
+                placeholder="Enter password"
+                name="password"
+                defaultValue={users.password}
+                onChange={(e) => setRePass(e.target.value)}
+                required
+                className={`border ${repasserror ? "border-red-500" : "border-gray-400"}  rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400`}
+              />
+              {repasserror && <span className="text-red-600"> Passwords Does not Match</span>}
+            </div>
 
             <div className="flex flex-col gap-2">
               <label htmlFor="role" className="mt-1 mb-0 pb-0">Choose Role</label>

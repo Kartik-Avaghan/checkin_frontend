@@ -83,13 +83,10 @@ const CheckedinVisitors = () => {
     // search
     const matchesSearch =
       v.name?.toLowerCase().includes(search.toLowerCase()) ||
-      v.mobile?.toString().includes(search);
+      v.mobile?.toString().includes(search) ||
+      v.visiting?.toLowerCase().includes(search.toLowerCase()) || 
+      v.purpose?.toLowerCase().includes(search.toLowerCase());
       return matchesSearch;
-
-    // status filter
-    // const matchesStatus =
-    //   statusFilter === 'all' || v.status === statusFilter;
-    // return matchesSearch && matchesStatus;
 
   });
 

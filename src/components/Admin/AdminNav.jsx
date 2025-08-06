@@ -1,12 +1,17 @@
 import { useState , useEffect } from "react";
 import { Menu, LogOut, X, Home, FileText, Plus, Users , Power } from "lucide-react";
-import { Link, useNavigate } from "react-router";
-import { jwtDecode } from "jwt-decode";
+import { Link , useNavigate } from "react-router";
+import { jwtDecode } from 'jwt-decode';
+import Logout from "../Logout";
+
 
 function AdminNav() {
   const [toggle, setToggle] = useState(false);
-  const navigate = useNavigate();
+  const [logout , setLogout] = useState(false);
+
   const [username , setusername] = useState();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     let token = localStorage.getItem("token");
@@ -19,7 +24,8 @@ function AdminNav() {
     }
   },[])
 
-  function handlelogout() {
+  function handlelogout(){
+
     fetch(`${import.meta.env.VITE_API_BASE_URL}/users/update/logout/${username}`, {
       method: "POST",
       credentials: "include",
@@ -36,11 +42,12 @@ function AdminNav() {
     .catch((err) => console.log(err))
   }
 
+
   return (
     <div className="relative">
       <div className="z-50 p-4 bg-sky-700 flex justify-between">
         <Menu className="text-white hover:cursor-pointer" onClick={() => setToggle(!toggle)} />
-        <Power className="text-white cursor-pointer" onClick={() => handlelogout()}/>
+        <Power className="text-white cursor-pointer" onClick={() => setLogout(true)}/>
       </div>
 
       {/* Sidebar */}
@@ -87,6 +94,8 @@ function AdminNav() {
           
         </div>
       </div>
+
+      {logout && <Logout setLogOut={setLogout}/>}
     </div>
   );
 }
