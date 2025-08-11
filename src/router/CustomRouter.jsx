@@ -12,6 +12,7 @@ import NotFound from '../pages/NotFound'
 import AdminAuth from './auth/AdminAuth'
 import AdminDashboard from '../pages/Admin/AdminDashboard'
 import ManageUsers from '../pages/Admin/ManageUsers'
+import UsersLogs from '../pages/Admin/UsersLogs'
 
 function CustomRouter() {
   return (
@@ -31,6 +32,8 @@ function CustomRouter() {
         <Route path='checkin' element={<Checkin/>}/>
         <Route path='report' element={<Report/>}/>
         <Route path='users' element={<ManageUsers/>} />
+        <Route path='logs' element={<UsersLogs/>} />
+
       </Route>
 
       <Route path='*' element={<NotFound/>} />

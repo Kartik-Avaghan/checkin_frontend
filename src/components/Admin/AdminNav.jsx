@@ -1,5 +1,5 @@
 import { useState , useEffect } from "react";
-import { Menu, LogOut, X, Home, FileText, Plus, Users , Power } from "lucide-react";
+import { Menu, LogOut, X, Home, FileText, Plus, Users , Power , UserRoundSearch  } from "lucide-react";
 import { Link , useNavigate } from "react-router";
 import { jwtDecode } from 'jwt-decode';
 import Logout from "../Logout";
@@ -77,6 +77,11 @@ function AdminNav() {
           <Link to={"/admin/users"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
             <Users className="text-white" size={24} />
             <button className="hover:cursor-pointer"> Manage Users </button>
+          </Link>
+
+          <Link to={"/admin/logs"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
+            <UserRoundSearch  className="text-white" size={24} />
+            <button className="hover:cursor-pointer"> Users Log </button>
           </Link>
 
           <Link to={"/admin/checkin"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
