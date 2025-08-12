@@ -89,7 +89,7 @@ function AddUsers({ setAddUser }) {
 
   return (
     <div className="fixed z-50 top-0 left-0 w-full">
-      <X size={30} className="absolute z-2 text-white right-5 top-4 md:right-50 md:top-10 cursor-pointer" onClick={() => setAddUser(false)}/>
+      <X size={30} className="absolute z-99 sm:text-white right-10 top-8 md:right-25 md:top-10 cursor-pointer" onClick={() => setAddUser(false)}/>
       <div className="flex justify-center items-center min-h-screen">
         {isLoading && <Loader />}
         <div className="flex m-6 z-10  flex-col gap-4 p-6 bg-white rounded-lg shadow-lg w-full max-w-md">

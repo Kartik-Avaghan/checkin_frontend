@@ -27,6 +27,7 @@ function UsersReport() {
   const [rolefilter , setRoleFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
+  const [sortConfig , setSortConfig] = useState({key: null , direction: "asc"});
 
   const { addToast } = useToast();
   const searchInputRef = useRef(null);
@@ -194,6 +195,25 @@ function UsersReport() {
     return () => clearTimeout(handler);
   }, [search]);
 
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+
+    if(sortConfig.key == key && sortConfig.direction == "asc"){
+      direction = 'desc'
+    }
+
+    const sortedData = [...data].sort((a, b) => {
+      if(a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+      if(a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      return 0; 
+    });
+
+    setdata(sortedData);
+    setSortConfig({key , direction});
+  }
+
+
   const filteredData = useMemo(() => {
     return data.filter((s) => {
       const search = String(debouncedSearch || "")
@@ -203,10 +223,10 @@ function UsersReport() {
       const name = String(s.username ?? "").toLowerCase();
       const role = String(s.role ?? "").toLowerCase();
 
-      const matchesSearch =
-        name.includes(search) 
+      const matchesSearch = name.includes(search) 
 
-      const matchesRole = rolefilter === "all" || (rolefilter === "staff" && role === "staff") || (rolefilter === "admin" && role === "admin");
+      const matchesRole = 
+        rolefilter === "all" || (rolefilter === "staff" && role === "staff") || (rolefilter === "admin" && role === "admin");
 
       const matchesStatus =
         filter === "all" ||
@@ -390,12 +410,17 @@ function UsersReport() {
             <table className="min-w-full text-sm">
               <thead className="bg-gray-100 text-gray-700 font-semibold">
                 <tr>
-                  <th className="p-3 text-left">date</th>
-                  <th className="p-3 text-left">Name</th>
-                  <th className="p-3 text-left">Role</th>
-                  <th className="p-3 text-left">Log in</th>
-                  <th className="p-3 text-left">Log out</th>
-                  <th className="p-3 text-left">Status</th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort('loginTime')}>
+                    <span>{sortConfig.key === "loginTime" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}</span>  date</th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort('username')}>
+                    <span>{sortConfig.key === "username" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}</span>  Name</th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort('role')}>
+                    <span>{sortConfig.key === "role" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}</span> Role</th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort('loginTime')}>
+                    <span>{sortConfig.key === "loginTime" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Log in</th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort('logoutTime')}>
+                    <span>{sortConfig.key === "logoutTime" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}</span> Log out</th>
+                  <th className="p-3 text-left"> Status</th>
                 </tr>
               </thead>
               <tbody>

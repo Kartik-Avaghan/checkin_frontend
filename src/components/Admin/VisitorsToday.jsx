@@ -3,6 +3,7 @@ import { CircleAlert, ChartGantt, Phone, Clock4 } from "lucide-react";
 
 function VisitorsToday({ date }) {
   const [data, setdata] = useState([]);
+  const [sortConfig , setSortConfig] = useState({key: null , direction: "asc"});
 
   function formatTime(timeStr) {
     if (!timeStr) return "-"; // handle empty, null, undefined
@@ -27,7 +28,6 @@ function VisitorsToday({ date }) {
   }
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
     fetch(`${import.meta.env.VITE_API_BASE_URL}/visitors/checkedin/${date}`, {
       method: "GET",
       credentials: "include",
@@ -50,6 +50,25 @@ function VisitorsToday({ date }) {
         console.log("Error in fetching Visitors", error);
       });
   }, [date]);
+
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+
+    if(sortConfig.key == key && sortConfig.direction == "asc"){
+      direction = 'desc'
+    }
+
+    const sortedData = [...data].sort((a, b) => {
+      if(a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+      if(a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      return 0; 
+    });
+
+    setdata(sortedData);
+    setSortConfig({key , direction});
+  }
+
 
   return (
     <div>
@@ -125,14 +144,30 @@ function VisitorsToday({ date }) {
             <table className="min-w-full text-sm">
               <thead className="bg-gray-100 text-gray-700 font-semibold">
                 <tr>
-                  <th className="p-3 text-left">Visitor</th>
-                  <th className="p-3 text-left">Mobile</th>
-                  <th className="p-3 text-left">Visiting</th>
-                  <th className="p-3 text-left">Purpose</th>
-                  <th className="p-3 text-left">Check-in</th>
-                  <th className="p-3 text-left">Check-out</th>
-                  <th className="p-3 text-left">Duration</th>
-                  <th className="p-3 text-left">Status</th>
+                  <th className="p-3 text-left cursor-pointer"  onClick={() => handleSort("name")} >
+                    <span> {sortConfig.key === "name" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Name
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("mobile")} >
+                    <span> {sortConfig.key === "mobile" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Mobile
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("visiting")} >
+                    <span> {sortConfig.key === "visiting" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Visiting
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("purpose")} >
+                    <span> {sortConfig.key === "purpose" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Purpose
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("checkinTime")} >
+                    <span> {sortConfig.key === "checkinTime" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Check-in
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("checkoutTime")} >
+                    <span> {sortConfig.key === "checkoutTime" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Check-out
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("duration")} >
+                    <span> {sortConfig.key === "duration" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Duration
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("status")} >
+                    <span> {sortConfig.key === "status" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Status
+                  </th>
                 </tr>
               </thead>
               <tbody>

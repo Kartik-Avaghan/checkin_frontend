@@ -39,6 +39,7 @@ function VisitorReport() {
   const [filter, setFilter] = useState("all");
   const [search , setSearch] = useState("");
   const [debouncedSearch , setDebouncedSearch] = useState(search);
+  const [sortConfig , setSortConfig] = useState({key: null , direction: "asc"});
 
   const {addToast} = useToast();
   const searchInputRef = useRef(null);
@@ -193,6 +194,23 @@ function VisitorReport() {
     return () => clearTimeout(handler);
   },[search])
 
+  const handleSort = (key) => {
+    let direction = 'asc';
+
+    if(sortConfig.key == key && sortConfig.direction == "asc"){
+      direction = 'desc'
+    }
+
+    const sortedData = [...data].sort((a, b) => {
+      if(a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+      if(a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      return 0; 
+    });
+
+    setdata(sortedData);
+    setSortConfig({key , direction});
+  }
+
 
   const filteredData = useMemo(() => {
   return data.filter((s) => {
@@ -265,7 +283,7 @@ function VisitorReport() {
         
         <div className="flex gap-4 flex-wrap justify-center">
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer"
             onClick={downloadCSV}
           >
             <Download size={16} />
@@ -273,7 +291,7 @@ function VisitorReport() {
           </button>
 
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer border-2"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer border-2"
             onClick={downloadPDF}
           >
             <File size={16} />
@@ -281,7 +299,7 @@ function VisitorReport() {
           </button>
 
           <button
-            className={`${addfilters ? 'bg-white border-2 border-gray-400 text-black hover:bg-black hover:text-white ' : 'bg-black text-white  hover:bg-gray-700'  } px-4 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer `}
+            className={`${addfilters ? 'bg-white border-2 border-gray-400 text-black hover:bg-black hover:text-white ' : 'bg-black text-white  hover:bg-gray-700'  } px-3 py-3 rounded-md text-sm flex items-center gap-2 hover:cursor-pointer `}
             onClick={() => setAddFilters(!addfilters)}
           >
             { addfilters ? <X size={16} /> : <Funnel size={16} />}
@@ -398,15 +416,33 @@ function VisitorReport() {
             <table className="min-w-full text-sm">
               <thead className="bg-gray-100 text-gray-700 font-semibold">
                 <tr>
-                  <th className="p-3 text-left">Visitor</th>
-                  <th className="p-3 text-left">Mobile</th>
-                  <th className="p-3 text-left">Visiting</th>
-                  <th className="p-3 text-left">Purpose</th>
-                  <th className="p-3 text-left">Check-in Date</th>
-                  <th className="p-3 text-left">Check-in</th>
-                  <th className="p-3 text-left">Check-out</th>
-                  <th className="p-3 text-left">Duration</th>
-                  <th className="p-3 text-left">Status</th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("name")} >
+                    <span> {sortConfig.key === "name" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Name
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("mobile")} >
+                    <span> {sortConfig.key === "mobile" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Mobile
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("visiting")} >
+                    <span> {sortConfig.key === "visiting" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Visiting
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("purpose")} >
+                    <span> {sortConfig.key === "purpose" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Purpose
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("checkinDate")} >
+                    <span> {sortConfig.key === "checkinDate" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Check-in Date
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("checkinTime")} >
+                    <span> {sortConfig.key === "checkinTime" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Check-in
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("checkoutTime")} >
+                    <span> {sortConfig.key === "checkoutTime" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Check-out
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("duration")} >
+                    <span> {sortConfig.key === "duration" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Duration
+                  </th>
+                  <th className="p-3 text-left cursor-pointer" onClick={() => handleSort("status")} >
+                    <span> {sortConfig.key === "status" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} </span> Status
+                  </th>
                 </tr>
               </thead>
               <tbody>

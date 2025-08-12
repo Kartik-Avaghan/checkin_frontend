@@ -12,6 +12,7 @@ function Manageuser() {
   const [edit, setEdit] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [sortConfig , setSortConfig] = useState({key: null , direction: "asc"});
 
   const searchInputRef = useRef(null);
 
@@ -51,6 +52,23 @@ function Manageuser() {
     setDelete(true)
   }
 
+  const handleSort = (key) => {
+    let direction = 'asc';
+
+    if(sortConfig.key == key && sortConfig.direction == "asc"){
+      direction = 'desc'
+    }
+
+    const sortedData = [...data].sort((a, b) => {
+      if(a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+      if(a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+      return 0; 
+    });
+
+    setData(sortedData);
+    setSortConfig({key , direction});
+  }
+
   const filteredData= data.filter((s)=>{
     const matchesSearch =
     s.username?.toLowerCase().includes(search.toLowerCase()) ||
@@ -86,7 +104,7 @@ function Manageuser() {
         {/* <div className="flex items-center space-x-1 text-lg font-semibold">
           <Funnel className="size-5 text-gray-500"/>
           <span className="text-gray-500 text-start">Filter</span>
-        </div> */}
+        </div> */}  
 
         {/* search and filters */}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 w-full">
@@ -110,7 +128,7 @@ function Manageuser() {
           </div>
 
           {/* Role Dropdown */}
-          <select value={statusFilter} onChange={((e)=>setStatusFilter(e.target.value))} className="w-full sm:w-auto border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600 ">
+          <select value={statusFilter} onChange={((e)=>setStatusFilter(e.target.value))} className="w-full sm:w-auto border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600" id="role">
             <option value="all">All Status</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
@@ -124,19 +142,19 @@ function Manageuser() {
             <table className="min-w-full table-auto border-collaps">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                    Name
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer" onClick={() => handleSort("username")}> 
+                  {sortConfig.key === "username" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} Name 
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                    Mobile
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer" onClick={() => handleSort("mobile")}>
+                    {sortConfig.key === "mobile" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} Mobile
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">
-                    Role
+                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 cursor-pointer" onClick={() => handleSort("role")}>
+                    {sortConfig.key === "role" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} Role
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">
-                    Status
+                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 cursor-pointer" onClick={() => handleSort("status")}>
+                    {sortConfig.key === "status" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""} Status
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">
+                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700" >
                     Actions
                   </th>
                 </tr>
@@ -195,6 +213,7 @@ function Manageuser() {
       {addUser && <AddUsers setAddUser={setAddUser}/> }
       { edit && <EditUser id={userId} setEdit={setEdit}/>}
       {deleteUser && <DeleteUser id={userId} setDelete={setDelete}/>}
+
     </div>
   );
 }
