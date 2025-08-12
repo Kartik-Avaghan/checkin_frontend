@@ -24,6 +24,7 @@ function UsersReport() {
   const [endDate, setEndDate] = useState( new Date().toISOString().split("T")[0]);
   const [addfilters, setAddFilters] = useState(false);
   const [filter, setFilter] = useState("all");
+  const [rolefilter , setRoleFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
 
@@ -31,29 +32,20 @@ function UsersReport() {
   const searchInputRef = useRef(null);
 
   const handleFocusSearch = () => {
-      searchInputRef.current?.focus();
+    searchInputRef.current?.focus();
   };
 
-  function formatTime(timeStr) {
-      if (!timeStr) return "-"; // handle empty, null, undefined
 
-      const today = new Date().toISOString().split("T")[0]; // "current date"
-      const date = new Date(`${today}T${timeStr}`); // combine date + time
+  function formatTime(timeString) {
+    const date = new Date(timeString);
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
 
-      if (isNaN(date)) return "-"; // invalid input
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 becomes 12
 
-      return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  }
-
-  function formatMinutes(totalMinutes) {
-      if (isNaN(totalMinutes) || totalMinutes < 0) return "-";
-
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-
-      if (hours === 0) return `${minutes}min`;
-      if (minutes === 0) return `${hours}hr`;
-      return `${hours}hrs ${minutes}min`;
+    return `${hours}:${minutes} ${ampm}`;
   }
 
   useEffect(() => {
@@ -209,23 +201,21 @@ function UsersReport() {
         .trim();
 
       const name = String(s.username ?? "").toLowerCase();
-      const role = String(s.role ?? "").toLowerCase(); // ← mobile is a number
-
+      const role = String(s.role ?? "").toLowerCase();
 
       const matchesSearch =
-        name.includes(search) ||
-        mobile.includes(search) ||
-        visiting.includes(search) ||
-        purpose.includes(search);
+        name.includes(search) 
+
+      const matchesRole = rolefilter === "all" || (rolefilter === "staff" && role === "staff") || (rolefilter === "admin" && role === "admin");
 
       const matchesStatus =
         filter === "all" ||
-        (filter === "active" && s.status === true) ||
-        (filter === "inactive" && s.status !== true);
+        (filter === "active" && s.logoutTime === null) ||
+        (filter === "inactive" && s.logoutTime );
 
-      return matchesSearch && matchesStatus;
+      return matchesSearch && matchesStatus && matchesRole;
     });
-  }, [data, debouncedSearch, filter]);
+  }, [data, debouncedSearch, filter, rolefilter]);
 
   useEffect(() => {
     if (addfilters == false) {
@@ -325,12 +315,21 @@ function UsersReport() {
               </button>
             </div>  
 
-            {/* Role Dropdown */}
-            <select value={filter} onChange={((e)=>setFilter(e.target.value))} className="w-full sm:w-auto border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600 ">
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">offline</option>
-            </select>
+            {/*  Dropdown */}
+            <div className="flex gap-4 flex-wrap">
+              <select value={rolefilter} onChange={((e)=>setRoleFilter(e.target.value))} className="w-full sm:w-auto border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600 ">
+                <option value="all">All Roles</option>
+                <option value="staff">Staff</option>
+                <option value="admin">Admin</option>
+              </select>
+
+              <select value={filter} onChange={((e)=>setFilter(e.target.value))} className="w-full sm:w-auto border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600 ">
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">offline</option>
+              </select>
+
+            </div>
           </div>
         </div>
       </div> }
@@ -353,11 +352,11 @@ function UsersReport() {
                 <div className="mt-2 ">
                   {v.logoutTime === null ? (
                     <span className="bg-green-600 text-white text-sm px-3 py-2 rounded-full text-nowrap">
-                      In Office
+                      Active
                     </span>
                   ) : (
                     <span className="bg-gray-200 text-gray-800 text-sm px-3 py-2 rounded-full text-nowrap">
-                      Checked Out
+                      Offline
                     </span>
                   )}
                 </div>
@@ -402,15 +401,15 @@ function UsersReport() {
               <tbody>
                 {filteredData.map((v , index) => (
                   <tr key={v.id} className="border-t border-gray-300">
-                    <td className="p-3"> {v.loginTime ? new Date(v.loginTime).toLocaleDateString("IN") : "-"} </td>
+                    <td className="p-3"> {v.loginTime ? new Date(v.loginTime).toLocaleDateString("en-IN") : "-"} </td>
                     <td className="p-3 font-medium">{v.username}</td>
                     <td className="p-3">{v.role}</td>
-                    <td className="p-3">{v.loginTime}</td>
-                    <td className="p-3">{v.logoutTime}</td>
+                    <td className="p-3">{v.loginTime ? formatTime(v.loginTime): "-"}</td>
+                    <td className="p-3">{v.logoutTime? formatTime(v.logoutTime) : "-"}</td>
                     <td className="p-3">
                       {v.logoutTime === null ? (
                         <span className="bg-green-600 text-white px-4 py-1 text-sm rounded-full">
-                          In Office
+                          Active
                         </span>
                       ) : (
                         <span className="bg-gray-200 text-gray-800 px-3 py-1 text-sm rounded-full">

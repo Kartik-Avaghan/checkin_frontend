@@ -65,6 +65,8 @@ function Stats({ date }) {
 
   return (
     <div className="flex items-center justify-center gap-4 lg:gap-8 flex-wrap p-4">
+
+      <Link to={"/admin/report"}>
       <div className="flex justify-between items-center w-75 md:w-100 md:h-25 text-center border-gray-300 border rounded-lg shadow-sm p-6">
         <div className="font-semibold text-wrap">
           <h2 className="text-lg md:text-xl text-gray-600">
@@ -77,8 +79,9 @@ function Stats({ date }) {
         <div className="flex items-center">
           <Users size={40} className="text-blue-600" />
         </div>
-      </div>
+      </div> </Link>
 
+      <Link to={"/admin/report"}>
       <div className="flex justify-between items-center w-75 md:w-100 md:h-25 text-center border-gray-300 border rounded-lg shadow-sm p-6">
         <div className="font-semibold text-wrap">
           <h2 className="text-lg md:text-xl text-gray-600">Currently In </h2>
@@ -89,8 +92,9 @@ function Stats({ date }) {
         <div className="flex items-center">
           <User size={40} className="text-green-600" />
         </div>
-      </div>
+      </div> </Link>
 
+      <Link to={"/admin/report"}>
       <div className="flex justify-between items-center w-75 md:w-100 md:h-25 text-center border-gray-300 border rounded-lg shadow-sm p-6">
         <div className="font-semibold text-wrap">
           <h2 className="text-lg md:text-xl text-gray-600">
@@ -103,7 +107,7 @@ function Stats({ date }) {
         <div className="flex items-center">
           <Clock size={40} className="text-gray-600" />
         </div>
-      </div>
+      </div> </Link>
 
       <Link to={"/admin/users"}>
       <div className="flex justify-between items-center w-75 md:w-100 md:h-25 text-center border-gray-300 border rounded-lg shadow-sm p-6">
