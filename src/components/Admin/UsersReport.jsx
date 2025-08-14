@@ -411,7 +411,7 @@ function UsersReport() {
               <thead className="bg-gray-100 text-gray-700 font-semibold">
                 <tr>
                   <th className="p-3 text-left cursor-pointer" onClick={() => handleSort('loginTime')}>
-                    <span>{sortConfig.key === "loginTime" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}</span>  date</th>
+                    <span>{sortConfig.key === "loginTime" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}</span>  Date</th>
                   <th className="p-3 text-left cursor-pointer" onClick={() => handleSort('username')}>
                     <span>{sortConfig.key === "username" ? (sortConfig.direction === "asc" ? "↑" : "↓") : ""}</span>  Name</th>
                   <th className="p-3 text-left cursor-pointer" onClick={() => handleSort('role')}>
