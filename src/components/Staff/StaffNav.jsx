@@ -46,14 +46,14 @@ function StaffNav() {
       <div className="z-50 p-4 bg-sky-700  cursor-pointer flex justify-between items-center
       ">
         <Menu className="text-white" onClick={() => setToggle(!toggle)}/>
-        <h4 className='text-white text-sm'> Welcome {username}</h4>
+        <h4 className='text-white text-sm lg:font-semibold'> Welcome {username}</h4>
         <Power className="text-white" onClick={() => setLogout(true)}/>
       </div>
       
       {/* Sidebar */}
       <div className={`fixed z-99 top-0 left-0 h-full w-64 bg-sky-800 text-white shadow-lg transform transition-transform duration-300 ease-in-out ${toggle ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex flex-col p-6 space-y-4 text-lg font-medium">
-
+        <div className='flex flex-col justify-between h-full'>
+          <div className="flex flex-col p-6 space-y-4 text-lg font-medium">
           <button onClick={() => setToggle(false)}><X className="text-white cursor-pointer mb-6" /></button>
 
           <Link
@@ -68,11 +68,13 @@ function StaffNav() {
             <button  className="hover:cursor-pointer"> Reports </button>
           </Link>
 
-          <button className="mt-auto flex items-center justify-center gap-2 bg-gray-900 hover:bg-white   px-4 py-3 rounded-full transition cursor-pointer hover:text-black"
+          <button className="mt-3 flex items-center justify-center gap-2 bg-gray-900 hover:bg-white  px-1 py-3 text-sm rounded-full transition cursor-pointer hover:text-black w-40 md:text-lg"
             onClick={() => {handlelogout()}}
           >
             Log Out <LogOut size={18} />
           </button>
+        </div>
+        <h6 className='mb-6  text-sm text-center text-gray-400/80'>&copy; Developed by Thincnext</h6>
         </div>
       </div>
       

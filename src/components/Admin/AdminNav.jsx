@@ -57,48 +57,52 @@ function AdminNav() {
           toggle ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex flex-col p-6 space-y-4 text-lg font-medium ">
-          <button onClick={() => setToggle(false)} className="mb-6">
-            <X className="text-white cursor-pointer" />
-          </button>
+        <div className="flex flex-col justify-between h-full">
+          <div className="flex flex-col p-6 space-y-4 text-lg font-medium ">
+            <button onClick={() => setToggle(false)} className="mb-6">
+              <X className="text-white cursor-pointer" />
+            </button>
 
-          <Link
-            to={"/admin/dashboard"}
-            className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
-            <Home className="text-white" size={24} />
-            <button className="hover:cursor-pointer">Home</button>
-          </Link>
+            <Link
+              to={"/admin/dashboard"}
+              className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
+              <Home className="text-white" size={24} />
+              <button className="hover:cursor-pointer">Home</button>
+            </Link>
 
-          <Link to={"/admin/report"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
-            <FileText className="text-white" size={24} />
-            <button  className="hover:cursor-pointer"> Reports </button>
-          </Link>
+            <Link to={"/admin/report"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
+              <FileText className="text-white" size={24} />
+              <button  className="hover:cursor-pointer"> Reports </button>
+            </Link>
 
-          <Link to={"/admin/users"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
-            <Users className="text-white" size={24} />
-            <button className="hover:cursor-pointer"> Manage Users </button>
-          </Link>
+            <Link to={"/admin/users"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
+              <Users className="text-white" size={24} />
+              <button className="hover:cursor-pointer"> Manage Users </button>
+            </Link>
 
-          <Link to={"/admin/logs"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
-            <UserRoundSearch  className="text-white" size={24} />
-            <button className="hover:cursor-pointer"> Users Log </button>
-          </Link>
+            <Link to={"/admin/logs"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
+              <UserRoundSearch  className="text-white" size={24} />
+              <button className="hover:cursor-pointer"> Users Report </button>
+            </Link>
 
-          <Link to={"/admin/checkin"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
-            <Plus className="text-white" size={24} />
-            <button className="hover:cursor-pointer"> Checkin </button>
-          </Link>
+            <Link to={"/admin/checkin"} className="flex items-center gap-2 hover:bg-sky-700 px-4 py-2 rounded-md transition w-full cursor-pointer">
+              <Plus className="text-white" size={24} />
+              <button className="hover:cursor-pointer"> Checkin </button>
+            </Link>
 
-          <button
-            className="mt-auto flex items-center justify-center gap-2 bg-gray-900 hover:bg-white px-4 py-3 rounded-full transition cursor-pointer  hover:text-black"
-            onClick={() => {
-              handlelogout();
-            }}
-          >
-            Log Out <LogOut size={18} />
-          </button>
-          
+            <button
+              className="mt-3 flex items-center justify-center gap-2 bg-gray-900 hover:bg-white  px-1 py-3 text-sm md:text-lg rounded-full transition cursor-pointer hover:text-black w-40 "
+              onClick={() => {
+                handlelogout();
+              }}
+            >
+              Log Out <LogOut size={18} />
+            </button>
+            
+          </div>
+          <h6 className='mb-6  text-sm text-center text-gray-400/80'>&copy; Developed by Thincnext</h6>
         </div>
+        
       </div>
 
       {logout && <Logout setLogOut={setLogout}/>}
