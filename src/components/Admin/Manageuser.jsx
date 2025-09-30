@@ -186,13 +186,14 @@ function Manageuser() {
                       )}
                     </td>
                     <td className="ml-2 px-2 py-3 flex gap-4 justify-center">
-                      {s.role == "super_admin" ? <></> : <div className="flex flex-nowrap gap-4">
-                      <button
+                       <button
                         className="hover:border-green-600 hover:text-white hover:bg-green-600 border-2 border-gray-300 p-2 rounded-lg mr-2 cursor-pointer"
                         onClick={() => { handleEdit(s.id); }}
                       >
                         <SquarePen className="w-4 h-4" />
                       </button>
+                      {s.role == "super_admin" ? <></> : <div className="flex flex-nowrap gap-4">
+                     
                       <button
                         onClick={() => handleDelete(s.id)}
                         className="hover:border-red-600 hover:text-white hover:bg-red-600 border-2 border-gray-300 p-2 rounded-lg cursor-pointer transition-all"
